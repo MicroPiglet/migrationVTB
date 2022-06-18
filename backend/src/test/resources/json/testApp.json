@@ -1,0 +1,1033 @@
+  {
+    "id": "8427d98c-d133-4221-9b22-a2d1ee2c1950",
+    "clientUncId": "20041318",
+    "type": "PACL3",
+    "status": "ISSUED_IN_EFR",
+    "createDate": "2020-07-30T21:40:45.882",
+    "updateDate": "2020-08-01T21:40:45.882",
+    "statusChangeDate": "2020-07-30T22:32:44.871",
+    "applicationBody": {
+      "requiredFields": {
+        "gender": "cm.Gender.Male",
+        "applyInsurance": true,
+        "loanAmount": 135000,
+        "loanTerm": 43,
+        "monthlyIncome": 200000.0,
+        "passportDataChecked": false,
+        "agreementPersonalDataProcessing": false,
+        "agreementCreditHistory": false,
+        "agreementTelecomOperators": false
+      },
+      "userAdditionalFields": {},
+      "nonpayrollClientRequiredFields": {},
+      "bankAccountId": "40817810001006001269",
+      "packageName": "Мультикарта",
+      "metaInfoEntity": {
+        "web": {},
+        "android": {},
+        "ios": {
+          "lastStage": "DefaultSceneLoanCalculator"
+        }
+      },
+      "personalDataChangedAfterPassportUiScreen": false,
+      "cpaclFields": {
+        "offer": {
+          "type": "PACL3",
+          "participantId": "701600000505_77788816",
+          "calculatorSettings": {
+            "insuranceRequired": false,
+            "interestRates": [
+              {
+                "loanAmountFrom": 75000.0,
+                "loanAmountTo": 200000.0,
+                "rate": 19.0,
+                "rateWithInsurance": 10.0,
+                "loanTermFrom": 1,
+                "loanTermTo": 60
+              },
+              {
+                "loanAmountFrom": 201000.0,
+                "loanAmountTo": 400000.0,
+                "rate": 18.5,
+                "rateWithInsurance": 9.0,
+                "loanTermFrom": 1,
+                "loanTermTo": 60
+              },
+              {
+                "loanAmountFrom": 401000.0,
+                "loanAmountTo": 5000000.0,
+                "rate": 17.5,
+                "rateWithInsurance": 8.0,
+                "loanTermFrom": 1,
+                "loanTermTo": 60
+              }
+            ],
+            "insuranceRates": [
+              {
+                "loanAmountFrom": 0.0,
+                "loanAmountTo": 200000.99,
+                "loanTermFrom": 12,
+                "loanTermTo": 84,
+                "insuranceRate": 0.35
+              },
+              {
+                "loanAmountFrom": 200001.0,
+                "loanAmountTo": 1000000.99,
+                "loanTermFrom": 12,
+                "loanTermTo": 84,
+                "insuranceRate": 0.24
+              },
+              {
+                "loanAmountFrom": 1000001.0,
+                "loanAmountTo": 1500000.99,
+                "loanTermFrom": 12,
+                "loanTermTo": 84,
+                "insuranceRate": 0.19
+              },
+              {
+                "loanAmountFrom": 1500001.0,
+                "loanAmountTo": 5000000.0,
+                "loanTermFrom": 12,
+                "loanTermTo": 84,
+                "insuranceRate": 0.18
+              }
+            ],
+            "loanLimits": {
+              "minLoanTerm": 1,
+              "maxLoanTerm": 60,
+              "minLoanAmount": 75000.0,
+              "maxLoanAmount": 5000000.0,
+              "amountStep": 0,
+              "termStep": 0
+            },
+            "loanDefaultValues": {
+              "term": 60,
+              "amount": 5000000.0
+            }
+          }
+        }
+      }
+    },
+    "isFrozen": false,
+    "scoringRequest": {
+      "languageCode": "en-US",
+      "dataArea": {
+        "loanApplicationEBO": {
+          "applicationId": {
+            "id": {
+              "value": "vtbonline-10010877"
+            },
+            "contextID": [],
+            "contextCode": [],
+            "applicationObjectKey": [],
+            "alternateObjectKey": []
+          },
+          "applicationType": {
+            "value": "cm.LoanApplicationType.Standard"
+          },
+          "applicationStatus": {
+            "code": {
+              "value": "cm.LoanApplicationStatus.DecisionProcessing"
+            },
+            "description": []
+          },
+          "subProductCode": {
+            "value": "Tech_Prod_KN"
+          },
+          "requestedTerm": {
+            "value": 28
+          },
+          "requestedAmount": {
+            "value": 87000,
+            "currencyID": "cm.Currency.643"
+          },
+          "saleTechnology": {
+            "value": "cm.LoanProductProvidingTechnology.NullVisit"
+          },
+          "completenessIndicator": false,
+          "infoSourceChannel": [],
+          "saleChannel": {
+            "value": "cm.ChannelKind.Telebank"
+          },
+          "comment": {},
+          "auditHistory": {
+            "createdBy": {
+              "user": {
+                "name": {
+                  "value": "WEBSPEED"
+                },
+                "employeeNumber": {
+                  "value": "000000"
+                },
+                "organizationUnit": {
+                  "organizationUnitIdentidication": {
+                    "value": "8977"
+                  },
+                  "parentOrganizationUnitIdentification": {
+                    "value": "cm.SystemInstance.BQ00000"
+                  }
+                }
+              }
+            },
+            "createdDateTime": "2020-08-02T21:40:45.882+03:00",
+            "updatedBy": {
+              "user": {
+                "name": {
+                  "value": "WEBSPEED"
+                },
+                "employeeNumber": {
+                  "value": "000000"
+                },
+                "organizationUnit": {
+                  "organizationUnitBranchIdentidication": {
+                    "value": "cm.SystemInstance.BQ00000"
+                  }
+                }
+              }
+            }
+          },
+          "repayableLoanContractReference": [],
+          "desicionReport": [],
+          "fullPrice": [],
+          "loanIntent": [],
+          "loanKind": [],
+          "loanDealParticipantList": [
+            {
+              "role": [
+                {
+                  "value": "cm.CustomerLoanApplicationRole.Applicant"
+                }
+              ],
+              "participantAnalysisIndicator": true,
+              "desicionReport": [],
+              "linkToDossierDocument": []
+            }
+          ],
+          "issuanceOrder": [],
+          "signatory": [],
+          "security": [],
+          "documentVisualEstimation": [],
+          "borrowerCheckServiceResolution": [],
+          "applicationScoringStage": {
+            "value": "cm.LoanApplicationScoringStage.AdmissionApplication"
+          },
+          "miniApplicationIndicator": false,
+          "linkedLoanApplications": [],
+          "liabilityType": {
+            "value": "cm.LiabilityType.Loan"
+          },
+          "markettingOfferReference": [],
+          "loanCommission": [],
+          "alternateProduct": [],
+          "decisionMaker": [],
+          "liabilities": [],
+          "internetApplication": [],
+          "initialFeeSource": [],
+          "loanApplicationEmployee": [],
+          "unifiedApplication": true,
+          "linkedApplication": [],
+          "requestedMonthlyPayment": {
+            "value": 100000.0,
+            "currencyID": "cm.Currency.643"
+          },
+          "bankProduct": {
+            "productCode": {
+              "value": "Tech_Prod_KN"
+            },
+            "currencyCode": [
+              {
+                "value": "cm.Currency.643"
+              }
+            ],
+            "organizationUnit": [],
+            "priceConditions": [
+              {
+                "termRange": {
+                  "productMinTerm": {
+                    "value": 12
+                  },
+                  "productMaxTerm": {
+                    "value": 84
+                  }
+                },
+                "amountRange": {
+                  "minAmount": {
+                    "value": 50000
+                  },
+                  "maxAmount": {
+                    "value": 999999.99
+                  }
+                }
+              }
+            ],
+            "interestRate": [
+              {
+                "rate": {
+                  "value": 7.5
+                }
+              }
+            ]
+          },
+          "geocodeData": [],
+          "lendingSupportGovernmentPrograms": []
+        },
+        "insuranceContractEBO": [],
+        "repayableLoanContract": [],
+        "customerParty": {
+          "partyIdentification": {
+            "id": {
+              "value": "1540925092"
+            },
+            "contextID": [],
+            "contextCode": [],
+            "applicationObjectKey": [],
+            "alternateObjectKey": [],
+            "partyClass": "PERSON"
+          },
+          "person": {
+            "genderCode": {
+              "value": "cm.Gender.Male"
+            },
+            "maritalStatusCode": {
+              "value": "cm.MaritalStatus.Married"
+            },
+            "birthDateTime": "1986-10-15",
+            "nationalityCountryCode": {
+              "value": "cm.Country.RUS"
+            },
+            "birthPlace": "Москва",
+            "personName": {
+              "fullName": [],
+              "firstName": [
+                {
+                  "value": "Хмеля"
+                }
+              ],
+              "middleName": [
+                {
+                  "value": "Нет"
+                }
+              ],
+              "familyName": [
+                {
+                  "value": "Бркредитынетрогать"
+                }
+              ],
+              "maidenName": [],
+              "title": [],
+              "alias": [],
+              "fullNameGenitive": [],
+              "fullNameDative": [],
+              "fullNameAblative": [],
+              "previousName": []
+            },
+            "bankEmployee": {
+              "type": {
+                "value": "cm.EmployeeType.NotEmployee"
+              }
+            },
+            "employmentRecord": [
+              {
+                "employer": [
+                  {
+                    "employerOrganizationName": [
+                      {
+                        "value": "ООО \"ЭПАМ СИСТЭМЗ\""
+                      }
+                    ],
+                    "taxPayerIdentificationNumber": {
+                      "value": "7719232155"
+                    },
+                    "corporateCategory": {
+                      "value": "cm.CorporateCategory.No"
+                    }
+                  }
+                ],
+                "employmentType": {
+                  "value": "cm.PersonEmploymentType.PrimaryWork"
+                },
+                "employmentContractType": {
+                  "value": "cm.PersonEmploymentContractType.NoDerivative"
+                },
+                "jobTitle": [],
+                "jobType": {
+                  "value": "cm.PersonJobType.ForHire"
+                }
+              }
+            ],
+            "educationRecord": [
+              {
+                "educationDegree": {
+                  "value": "cm.Education.HigherEducation"
+                }
+              }
+            ],
+            "relatives": [],
+            "family": {
+              "membersQty": {
+                "value": 0
+              },
+              "dependentsQty": {
+                "value": 0
+              }
+            },
+            "personDocumentIdentity": [
+              {
+                "series": {
+                  "value": "3712"
+                },
+                "number": {
+                  "value": "140704"
+                },
+                "issuingCountryCode": {
+                  "value": "cm.Country.RUS"
+                },
+                "typeCode": {
+                  "value": "cm.DocumentType.28"
+                },
+                "issueName": {
+                  "value": "Отделением УФМС России по Курганской области в Куртамышском районе"
+                },
+                "issueCode": "450-012",
+                "issueDate": "2013-01-30",
+                "documentKind": {
+                  "value": "cm.PersonDocumentKind.Main"
+                }
+              }
+            ],
+            "locationReference": [
+              {
+                "typeCode": {
+                  "value": "cm.AddressType.Actual"
+                },
+                "address": {
+                  "notFormAddrName": [
+                    {
+                      "value": "129336 Россия г Москва ул Стартовая дом 17 кв 65"
+                    }
+                  ],
+                  "multiStringFullAddress": [],
+                  "country": {
+                    "value": "cm.Country.RUS"
+                  },
+                  "zipCode": {
+                    "value": "129336"
+                  },
+                  "provinceType": {
+                    "value": "г"
+                  },
+                  "province": {
+                    "value": "cm.region.Moscow"
+                  },
+                  "cityType": {
+                    "value": "г"
+                  },
+                  "city": {
+                    "value": "Москва"
+                  },
+                  "streetType": {
+                    "value": "ул"
+                  },
+                  "street": {
+                    "value": "Стартовая"
+                  },
+                  "house": {
+                    "value": "17"
+                  },
+                  "apartmentNumber": {
+                    "value": "65"
+                  }
+                },
+                "description": []
+              },
+              {
+                "typeCode": {
+                  "value": "cm.AddressType.PermanentRegistration"
+                },
+                "address": {
+                  "notFormAddrName": [
+                    {
+                      "value": "129336 Россия г Москва ул Стартовая дом 17 кв 65"
+                    }
+                  ],
+                  "multiStringFullAddress": [],
+                  "country": {
+                    "value": "cm.Country.RUS"
+                  },
+                  "zipCode": {
+                    "value": "129336"
+                  },
+                  "provinceType": {
+                    "value": "г"
+                  },
+                  "province": {
+                    "value": "cm.region.Moscow"
+                  },
+                  "cityType": {
+                    "value": "г"
+                  },
+                  "city": {
+                    "value": "Москва"
+                  },
+                  "streetType": {
+                    "value": "ул"
+                  },
+                  "street": {
+                    "value": "Стартовая"
+                  },
+                  "house": {
+                    "value": "17"
+                  },
+                  "apartmentNumber": {
+                    "value": "65"
+                  }
+                },
+                "description": []
+              }
+            ],
+            "contactPhoneCommunication": [
+              {
+                "phoneCommunication": {
+                  "completeNumber": {
+                    "value": "9031407107"
+                  },
+                  "useCode": {
+                    "value": "cm.PhoneType.ForNotifications"
+                  },
+                  "addPhoneNumber": {},
+                  "areaName": {
+                    "value": "Москва и Московская область"
+                  }
+                }
+              }
+            ],
+            "contactFaxCommunication": [],
+            "contactEmailCommunication": [],
+            "salaryIndicator": true,
+            "riskLevel": [],
+            "confidant": [],
+            "vip": false,
+            "userAccount": []
+          },
+          "partyContact": [],
+          "partyDeliverySchema": [],
+          "levelCode": {
+            "value": "cm.CustomerLifeCycleStatus.Client"
+          },
+          "relatedCustomerParty": [],
+          "customerSpecialInfo": {
+            "consentCreditBureauVerification": true,
+            "consentCreditBureauUpload": true,
+            "consentPhoneVerification": true,
+            "pfrregisterIndicator": false,
+            "pfrrequestConsent": false
+          },
+          "customerIncome": [
+            {
+              "incomeType": {
+                "value": "cm.PersonIncomeType.Basic"
+              },
+              "amount": {
+                "value": 200000.0,
+                "currencyID": "cm.Currency.643"
+              },
+              "confirmDocType": {
+                "value": "cm.PersonConfirmIncomeDocument.2NDFL"
+              },
+              "incomeConfirmationMethod": {
+                "value": "cm.IncomeConfirmationType.DirectConfirmation"
+              },
+              "incomeConfirmDocument": []
+            }
+          ],
+          "customerExpense": [],
+          "liabilities": [],
+          "blackList": [],
+          "serviceSegment": [
+            {
+              "value": {
+                "value": "cm.PersonServiceSegment.Mass"
+              }
+            }
+          ],
+          "additionalQuestions": [],
+          "visualAssesmentQuestions": [],
+          "decisionAdditionalInformation": [],
+          "clientConsent": [],
+          "customerClassificationData": [],
+          "uniqueClientIdentificator": [],
+          "esiapersonAccount": []
+        },
+        "loanDealParticipant": [],
+        "alternativeProduct": [],
+        "equipment": []
+      }
+    },
+    "scoringResult": {
+      "languageCode": "en-US",
+      "dataArea": {
+        "loanApplicationEBO": {
+          "applicationId": {
+            "id": {
+              "value": "vtbonline-10010877"
+            },
+            "contextID": [],
+            "contextCode": [],
+            "applicationObjectKey": [],
+            "alternateObjectKey": []
+          },
+          "applicationStatus": {
+            "code": {
+              "value": "cm.LoanApplicationStatus.Approved"
+            },
+            "description": [],
+            "subStatusCode": {
+              "value": "cm.DecisionCategory.ExpressDecision"
+            }
+          },
+          "infoSourceChannel": [],
+          "comment": {
+            "value": ""
+          },
+          "repayableLoanContractReference": [],
+          "desicionReport": [
+            {
+              "desicionDate": "2020-08-06",
+              "desicionTerm": {
+                "value": 60
+              },
+              "maxAmount": {
+                "value": 2000000.0
+              },
+              "minAmount": {
+                "value": 50000.0
+              },
+              "calcBasis": {},
+              "loanTranche": [],
+              "protocolAgreement": [],
+              "additionalConditions": [],
+              "security": [],
+              "limitChange": [],
+              "desicionId": {
+                "id": {
+                  "value": "1"
+                },
+                "contextID": [],
+                "contextCode": [],
+                "applicationObjectKey": [],
+                "alternateObjectKey": []
+              },
+              "productClass": {
+                "value": "cm.LiabilityType.Loan"
+              },
+              "decisionCode": {
+                "value": "cm.DecisionCode.Approve"
+              },
+              "decisionEndDate": "2025-07-30",
+              "priorityDesiсion": true,
+              "monthlyPayment": {
+                "value": 120000.0
+              },
+              "companionProductDesicion": false,
+              "fullPrice": [],
+              "verifiedIncome": {
+                "value": 200000.0
+              },
+              "decisionDetailsOnLimitCalculation": {
+                "totalRBGLiabilitiesAmount": {
+                  "value": 0.0
+                },
+                "underwritingRate": []
+              },
+              "automaticDecisionAmount": {
+                "value": 5000000.0
+              },
+              "creditProgram": {
+                "value": "cm.BonusCreditProgramType.FreshCash"
+              },
+              "riskGrade": "ME1",
+              "preapprovedDecision": false,
+              "segmentCode": {
+                "value": "cm.ServiceSegment.CorpSalary"
+              },
+              "unsecuredLimit": {
+                "value": "2100000.0"
+              },
+              "prescoringProposal": {
+                "minLimit": "50000.0",
+                "maxLimit": "2000000.0",
+                "minFreshCash": "0.0",
+                "maxFreshCash": "87000.0",
+                "minCV": "15.0",
+                "minEROA": "1.0",
+                "minTerm": {
+                  "value": 6
+                },
+                "maxTerm": {
+                  "value": 60
+                },
+                "incomeType": {
+                  "value": "cm.IncomeConfirmationType.WithoutConfirmation"
+                },
+                "additionalDocument": false,
+                "ecor": "6.05",
+                "confirmationOfEmployment": false
+              },
+              "contractNumber": {
+                "id": {
+                  "value": ""
+                },
+                "contextID": [],
+                "contextCode": [],
+                "applicationObjectKey": [],
+                "alternateObjectKey": []
+              },
+              "jointScore": 572.0,
+              "first12MonthLossOfSalesCoef": 2.9420770857080309,
+              "estimatedEarlyPaymentAvg": 1.0,
+              "loanProductOfferClass": [],
+              "productClassShortName": [],
+              "padesicionRate": {}
+            }
+          ],
+          "fullPrice": [],
+          "loanIntent": [],
+          "loanKind": [],
+          "loanDealParticipantList": [
+            {
+              "role": [],
+              "desicionReport": [
+                {
+                  "desicionDate": "2020-08-06",
+                  "maxAmount": {},
+                  "loanTranche": [],
+                  "protocolAgreement": [],
+                  "additionalConditions": [],
+                  "security": [],
+                  "limitChange": [],
+                  "desicionId": {
+                    "id": {
+                      "value": "1"
+                    },
+                    "contextID": [],
+                    "contextCode": [],
+                    "applicationObjectKey": [],
+                    "alternateObjectKey": []
+                  },
+                  "decisionCode": {
+                    "value": "cm.DecisionCode.Approve"
+                  },
+                  "monthlyPayment": {
+                    "value": 120000.0
+                  },
+                  "fullPrice": [],
+                  "score": 572,
+                  "triggeredRule": "",
+                  "confirmSalaryCategoryIndicator": true,
+                  "loanProductOfferClass": [],
+                  "productClassShortName": []
+                }
+              ],
+              "linkToDossierDocument": []
+            }
+          ],
+          "issuanceOrder": [],
+          "signatory": [],
+          "security": [],
+          "documentVisualEstimation": [],
+          "borrowerCheckServiceResolution": [
+            {
+              "siteInspection": {
+                "refuseReason": "",
+                "comment": "http://dev-globex:5353/Inquiry.aspx?id=2601431",
+                "auditBy": {
+                  "login": {
+                    "id": {
+                      "value": "EXP"
+                    },
+                    "contextID": [],
+                    "contextCode": [],
+                    "applicationObjectKey": [],
+                    "alternateObjectKey": []
+                  },
+                  "name": {
+                    "value": ""
+                  }
+                },
+                "address": [],
+                "auditOnSiteTermIndicator": false,
+                "auditOnSiteIndicator": "",
+                "decision": ""
+              },
+              "answerTimeDate": "2020-08-06T17:36:00+03:00",
+              "decision": {
+                "value": "01"
+              },
+              "actualCheckLevel": "1",
+              "checkStage": "1",
+              "verificationVector": "TKN11-;NewL=veryAgres;",
+              "maxCheckLevel": "8",
+              "riskManagerComment": "http://dev-globex:5353/Inquiry.aspx?id=2601431",
+              "bcsresolutionCode": {
+                "value": "TKN11-;NewL=veryAgres;"
+              },
+              "bcsresolutionComment": "",
+              "bcsresolutionCodeGroup": ""
+            }
+          ],
+          "applicationScoringStage": {
+            "value": "cm.LoanApplicationScoringStage.DecisionIsMade"
+          },
+          "linkedLoanApplications": [],
+          "markettingOfferReference": [],
+          "loanCommission": [],
+          "alternateProduct": [],
+          "decisionMaker": [],
+          "liabilities": [],
+          "internetApplication": [],
+          "personMortgageApplication": {
+            "underwritingRate": [],
+            "funder": []
+          },
+          "initialFeeSource": [],
+          "loanApplicationEmployee": [],
+          "linkedApplication": [],
+          "geocodeData": [],
+          "lendingSupportGovernmentPrograms": []
+        },
+        "customerParty": [],
+        "insuranceContractEBO": [],
+        "loanContractEBO": {},
+        "marketingOfferEBO": [],
+        "marketingActionEBO": [],
+        "bankCard": {
+          "bankCardIdentification": {
+            "contextID": [],
+            "contextCode": [],
+            "applicationObjectKey": [],
+            "alternateObjectKey": []
+          },
+          "balanceInfo": [],
+          "changeStatusHistory": [],
+          "bankCardAggregates": [],
+          "cardOperationsSegment": []
+        },
+        "depositContract": [],
+        "bankAccount": [],
+        "otherLoanContracts": [],
+        "pensionFundAccountStatementEBO": {
+          "fixPayment": [],
+          "cofinancingPayment": [],
+          "contributionPayment": [],
+          "pensionFundAccountStatementLine": [],
+          "generalPart": [],
+          "specialPart": []
+        },
+        "repayableLoanContract": [
+          {
+            "loanContractId": {
+              "id": {
+                "value": ""
+              },
+              "contextID": [],
+              "contextCode": [],
+              "applicationObjectKey": [],
+              "alternateObjectKey": []
+            },
+            "paymentSchedule": [],
+            "bankAccountReference": [],
+            "loanTranche": [],
+            "auditHistory": {
+              "createdBy": {
+                "organizationUnit": {}
+              }
+            },
+            "collateralContractReference": [],
+            "guaranteeContractReference": [],
+            "insuranceContractReference": [],
+            "payments": [],
+            "options": [],
+            "loanCommission": [],
+            "changeInterestRate": [],
+            "applicationDiscountPremium": [],
+            "pastDue": []
+          }
+        ],
+        "loanProduct": {
+          "priceConditions": []
+        },
+        "rbgliabilities": [
+          {
+            "loanContractId": {
+              "id": {
+                "value": "0"
+              },
+              "contextID": [],
+              "contextCode": [],
+              "applicationObjectKey": [],
+              "alternateObjectKey": []
+            },
+            "paymentSchedule": [],
+            "bankAccountReference": [],
+            "loanTranche": [],
+            "collateralContractReference": [],
+            "guaranteeContractReference": [],
+            "insuranceContractReference": [],
+            "payments": [],
+            "options": [],
+            "loanCommission": [],
+            "changeInterestRate": [],
+            "applicationDiscountPremium": [],
+            "pastDue": []
+          }
+        ],
+        "rbgparticipant": []
+      },
+      "ebmheader": {
+        "ebmid": {
+          "value": "19d43079-2da8-4afc-86e9-0532108f87ba"
+        },
+        "creationDateTime": "2020-08-06T17:36:56.858+03:00",
+        "sender": {
+          "id": {
+            "value": "cm.SystemInstance.OM"
+          },
+          "description": [],
+          "callingServiceName": [],
+          "application": {
+            "id": {
+              "value": "FICO"
+            }
+          },
+          "contactName": [],
+          "objectCrossReference": [
+            {
+              "senderObjectIdentification": {
+                "id": {
+                  "value": "vtbonline-10010877"
+                },
+                "contextID": [],
+                "alternateObjectKey": []
+              }
+            }
+          ],
+          "esbheaderExtension": []
+        },
+        "target": {
+          "id": {
+            "value": "cm.SystemInstance.ULBSF"
+          },
+          "serviceName": []
+        },
+        "businessScope": [
+          {
+            "businessScopeTypeCode": {
+              "value": "infra.LoanApplicationWorkflowType.KN"
+            },
+            "enterpriseServiceName": []
+          }
+        ],
+        "faultNotification": [
+          {
+            "correctiveAction": []
+          }
+        ],
+        "ebmname": [
+          {
+            "value": "{http://www.vtb24.ru/EnterpriseObjectLibrary/Business/Common/Services/PublishPersonLoanApplicationStatus/V2}PublishPersonLoanApplicationStatusEBM"
+          }
+        ],
+        "eboname": [
+          {
+            "value": "{http://www.vtb24.ru/EnterpriseObjectLibrary/Business/Common/Model/LoanApplication/V1}LoanApplicationEBO"
+          }
+        ],
+        "ebmtracking": [
+          {
+            "sequenceNumber": 1,
+            "executionUnitName": [
+              {
+                "value": "PublishPersonLoanApplicationStatusOMReqAV2Impl"
+              }
+            ],
+            "implementationCode": "BPEL",
+            "activityDateTime": "2020-08-06T17:36:56.945+03:00"
+          }
+        ]
+      }
+    },
+    "bestChoiceResult": {
+      "productList": [
+        {
+          "id": "ca2635ad-3c20-4541-bced-e495106622e0",
+          "productCategory": "KN",
+          "typeLabel": "КН",
+          "cashAmount": 87000,
+          "rate": 16.2,
+          "payment": 2124,
+          "term": 60,
+          "exemptionPayment": 0.0,
+          "exemptionPaymentCount": 0,
+          "currencyCode": "RUR",
+          "totalAmount": 87000,
+          "percentAmount": 40495.8,
+          "amountMin": 50000.0,
+          "amountMax": 999999.0,
+          "employmentHistoryRequiredFlag": 0,
+          "additionalDocRequiredFlag": 0,
+          "incomeConfirmationType": "Без подтверждения",
+          "creditProgram": "FreshCash",
+          "crossProductId": [],
+          "decisionId": "1",
+          "servicePackage": "Мультикарта",
+          "insuranceSumKN": 0,
+          "maxMonthlyPayment": 120000.0,
+          "priorityFlag": 1,
+          "isSelected": false,
+          "isExpanded": false,
+          "needCard": false,
+          "offerId": "1",
+          "contractNumber": "",
+          "preApproveFlg": "N",
+          "crossProduct": false,
+          "preapproved": false,
+          "paymentSystems": [],
+          "repaymentLoans": [],
+          "insuranceList": [],
+          "insuranceListCopy": [],
+          "issueType": "CASH_ONLINE"
+        }
+      ],
+      "limitChange": [],
+      "errorMessageList": []
+    },
+    "marker": {
+      "kodMarker": {
+        "loanTerm": 84,
+        "issueDate": "30.07.2019",
+        "loanAmount": 3403000,
+        "monthlyIncome": 200130.08,
+        "applyInsurance": true
+      },
+      "bestChoiceMarker": {
+        "loanTerm": 84,
+        "loanAmount": 3403000,
+        "applyInsurance": true,
+        "isSalaryCustomer": true,
+        "personalizedOfferId": "271533126439_753210"
+      },
+      "loanContractMarker": {
+        "loanTerm": 84,
+        "issueDate": "30.07.2019",
+        "loanAmount": 3403000,
+        "applyInsurance": true
+      },
+      "bisquitLoanContractMarker": {
+        "loanTerm": 84,
+        "loanAmount": 3403000,
+        "monthlyIncome": 200130.08,
+        "applyInsurance": true
+      }
+    },
+    "typeCode":"PACL3"
+  }

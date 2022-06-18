@@ -1,0 +1,327 @@
+openapi: 3.0.1
+info:
+  title: API for mssa-digi-integration-afl
+  description: API для интеграционного микросерсива mssa-digi-integration-afl
+  contact:
+    name: Мищенко Богдан Романович
+    url: https://wiki.corp.dev.vtb/pages/viewpage.action?pageId=1458519462
+    email: brmischenko@vtb.ru
+  version: 1.0.0
+tags:
+  - name: afl
+servers:
+  - url: /
+paths:
+  /application/v1/{mdmId}/{applicationId}:
+    parameters:
+      - in: path
+        required: true
+        name: mdmId
+        schema:
+          type: integer
+          format: int64
+          minimum: 0
+        description: Идентификатор клиента
+      - in: path
+        required: true
+        name: applicationId
+        schema:
+          type: string
+          minLength: 3
+          maxLength: 255
+        description: Идентификатор заявки
+    get:
+      tags:
+        - afl
+      description: Получение информации по одной заявке
+      operationId: getApplicationInfo
+      responses:
+        "200":
+          description: ОК
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationObject'
+        "400":
+          description: Ошибка форматно-логического контроля
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "408":
+          description: Превышение времени ожидания ответа сервера
+        "422":
+          description: Ошибка со стороны AFL
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "500":
+          description: Внутренняя ошибка микросервиса
+    post:
+      tags:
+        - afl
+      summary: Обновление статусов заявки
+      description: Обновление статусов заявки
+      operationId: sendProductStatus
+      requestBody:
+        description: Параметры заявки
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/SendProductStatusRequest'
+        required: true
+      responses:
+        "204":
+          description: Сообщение передано в AFL
+        "400":
+          description: Ошибка форматно-логического контроля
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "408":
+          description: Превышение времени ожидания ответа сервера
+        "422":
+          description: Ошибка со стороны AFL
+        "500":
+          description: Внутренняя ошибка микросервиса
+  /application/v1/{mdmId}:
+    parameters:
+      - in: path
+        required: true
+        name: mdmId
+        schema:
+          type: integer
+          format: int64
+          minimum: 0
+        description: Идентификатор клиента
+    get:
+      tags:
+        - afl
+      description: Получение краткой информации о заявках клиента
+      operationId: getUserApplications
+      responses:
+        "200":
+          description: ОК
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserApplicationResponse'
+        "400":
+          description: Ошибка форматно-логического контроля
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "408":
+          description: Превышение времени ожидания ответа сервера
+        "422":
+          description: Ошибка со стороны AFL
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        "500":
+          description: Внутренняя ошибка микросервиса
+components:
+  schemas:
+    ApplicationObject:
+      required:
+        - applicationUniqueId
+        - data
+        - mdmId
+        - metadata
+        - status
+        - created
+        - updated
+      type: object
+      properties:
+        mdmId:
+          minimum: 0
+          type: integer
+          format: int64
+        applicationUniqueId:
+          minLength: 3
+          maxLength: 255
+          type: string
+        status:
+          maxLength: 255
+          type: string
+        created:
+          type: string
+          format: date-time
+        updated:
+          type: string
+          format: date-time
+        data:
+          maxProperties: 2147483647
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+            additionalProperties: false
+      additionalProperties: false
+    GetUserApplications:
+      required:
+        - mdmId
+      type: object
+      properties:
+        mdmId:
+          minimum: 0
+          type: integer
+          description: Идентификатор клиента
+          format: int64
+      additionalProperties: false
+      description: Запрос на получение всех идентификаторов заявок клиента
+    UserApplicationResponse:
+      required:
+        - created
+        - id
+        - sourceSystem
+        - status
+        - updated
+      type: object
+      properties:
+        id:
+          maxLength: 255
+          type: string
+          description: Идентификатор заявки
+        sourceSystem:
+          maxLength: 255
+          type: string
+          description: "Система, в которой была заведена заявка"
+        status:
+          maxLength: 255
+          type: string
+          description: Статус заявки
+        created:
+          type: string
+          description: Дата создания заявки
+          format: date-time
+        updated:
+          type: string
+          description: Дата обновления заявки
+          format: date-time
+        type:
+          maxLength: 255
+          type: string
+          description: Тип заявки (берется из поля data->type)
+      additionalProperties: false
+      description: Краткое инфо о всех заявках клиента
+    SendProductStatusRequest:
+      required:
+        - status
+        - data
+      type: object
+      properties:
+        status:
+          maxLength: 255
+          type: string
+          description: Статус заявки
+        data:
+          $ref: '#/components/schemas/Data'
+    Data:
+      required:
+        - created
+        - updated
+        - stage
+        - creationChannel
+      title: data
+      type: object
+      properties:
+        created:
+          type: string
+          format: date-time
+          description: Дата и время создания Формат YYYY-MM-DDThh:mm:ss+hh:mm
+        updated:
+          type: string
+          format: date-time
+          description: Дата и время последнего обновления заявки Формат YYYY-MM-DDThh:mm:ss+hh:mm
+        stage:
+          minLength: 1
+          maxLength: 255
+          type: string
+          description: Этап жизненного цикла заявки
+        creationChannel:
+          type: string
+          enum:
+            - cm.ChannelKind.Internet
+            - cm.ChannelKind.Telebank
+          description: Канал создания заявки
+        scoringDate:
+          type: string
+          format: date-time
+          description: Дата скоринга Формат YYYY-MM-DDThh:mm:ss+hh:mm
+        endDate:
+          type: string
+          format: date
+          description: Срок действия решения Формат YYYY-MM-DD
+        offerId:
+          maxLength: 255
+          type: string
+          description: id оффера в СПК
+        product:
+          type: array
+          description: Данные о продукте в заявке
+          items:
+            $ref: '#/components/schemas/Product'
+      additionalProperties: false
+    Product:
+      required:
+        - type
+        - amount
+        - totalAmount
+        - crossSales
+        - currency
+      type: object
+      properties:
+        type:
+          minLength: 1
+          maxLength: 255
+          type: string
+          description: Тип продукта
+        amount:
+          type: string
+          pattern: ^(?:0|(?:[1-9]\d*))\.?\d{0,2}$
+          description: Для кредита наличными, рефинансирования, PACL, TOP_UP - общая сумма кредита, для КК, PACC, CPACC - лимит по карте
+        totalAmount:
+          type: string
+          pattern: ^(?:0|(?:[1-9]\d*))\.?\d{0,2}$
+          description: Полная сумма кредита
+        crossSales:
+          type: boolean
+          description: Признак кросс продаж
+        dateIssue:
+          type: string
+          format: date-time
+          description: Дата выдачи
+        rate:
+          type: string
+          pattern: ^(?:0|(?:[1-9]\d*))\.?\d{0,3}$
+          description: Годовая ставка в процентах
+        payment :
+          type: string
+          pattern: ^(?:0|(?:[1-9]\d*))\.?\d{0,2}$
+          description: Ежемесячный платеж
+        term  :
+          maximum: 1200
+          minimum: 1
+          type: integer
+          description: Срок кредита в месяцах
+      additionalProperties: false
+    ErrorMessage:
+      description: Код и описание ошибки
+      type: object
+      properties:
+        errorCode:
+          maxLength: 64
+          type: string
+          description: Код ошибки
+        errorMessage:
+          maxLength: 2000
+          type: string
+          description: Описание ошибки
+      additionalProperties: false

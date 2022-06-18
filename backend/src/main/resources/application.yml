@@ -1,0 +1,69 @@
+spring:
+  application:
+    name: mscl-issu-integration-router
+  jackson:
+    default-property-inclusion: non_null
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: loanorc
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${LOANORC_DB_URL:jdbc:postgresql://127.0.0.1:5432/loanorc}
+    username: ${LOANORC_DB_USER:postgres}
+    password: ${LOANORC_DB_PASSWORD:root}
+    hikari:
+      minimum-pool-size: ${HIKARI_MIN_POOL_SIZE:1}
+      maximum-pool-size: ${HIKARI_MAX_POOL_SIZE:50}
+      minimum-idle: ${HIKARI_MIN_IDLE:1}
+      connection-timeout: ${HIKARI_CONNECTION_TIMEOUT:5000}
+      pool-name: datasource-pool-${spring.application.name}
+      transaction-isolation: TRANSACTION_READ_COMMITTED # override default DB isolation level
+  liquibase:
+    enabled: true
+    change-log: classpath:/migrations/master.xml
+    liquibase-schema: loanorc_liquibase
+    user: ${LIQUIBASE_USER:postgres}
+    password: ${LIQUIBASE_PASSWORD:root}
+
+endpoint:
+  afl:
+    url: http://localhost:8086/
+    readTimeout: 30s
+    connectionTimeout: 30s
+  mdm:
+    url: http://localhost:8086/
+    readTimeout: 30s
+    connectionTimeout: 30s
+
+
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      livenessState:
+        enabled: true
+      readinessState:
+        enabled: true
+
+afl:
+  currency: RUB
+
+msa:
+  meta:
+    microservice-name: mssa-digi-integration-migr
+    namespace: # openshift namespace
+    ris-code: 0000_0
+    project-code: MSSAD
+
+logging:
+  level:
+    ru.vtb: ${LOGGING_LEVEL:DEBUG}
+  pattern:
+    console: "%clr(%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr([messageId=%X{messageId} callId=%X{callId} unc=%X{unc} sessionId=%X{sessionId} methodName=%X{methodName} initiatorHost=%X{initiatorHost} mdmId=%X{mdmId} initiatorService=%X{initiatorService} messageType=%X{messageType}]){magenta} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
+
