@@ -1,22 +1,21 @@
 package ru.vtb.mssa.digi.integration.migr.repository
 
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Lock
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
-import org.springframework.data.jpa.repository.QueryHints
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 import ru.vtb.mssa.digi.integration.migr.model.db.MigrationStatusT1
 import java.util.*
-import javax.persistence.QueryHint
+
 
 
 @Repository
 interface MigrationStatusRepository : JpaRepository<MigrationStatusT1, UUID> {
 
-    @Query(value = "select DISTINCT CAST(id AS VARCHAR) from loanorc.t1 where application_migration_status = :status " +
-            "order by id LIMIT 20", nativeQuery = true)
-    @QueryHints(QueryHint(name = "javax.persistence.lock.timeout", value ="-2"))
+    @Query(value = "select CAST(id AS VARCHAR) from loanorc.t1 where application_migration_status = :status " +
+            "order by id LIMIT 20 for update skip locked", nativeQuery = true)
     fun findIdsByStatus(@Param("status") status: Int): List<UUID>
 
     fun countMigrationStatusT1ByMigrationStatus(status: Int): Long

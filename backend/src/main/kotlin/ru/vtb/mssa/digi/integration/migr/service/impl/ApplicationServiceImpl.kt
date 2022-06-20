@@ -56,6 +56,7 @@ class ApplicationServiceImpl(
     override fun findByStatus(status: ApplicationStatus): List<MigrationStatusDao> =
         applicationRepository.findByStatus(status)
 
+    @Transactional
     override fun prepareUpdatedApplications(): List<MigrationStatusDao> {
         val applicationsForUpdate: List<MigrationStatusDao> = applicationRepository.findUpdatedApplications()
         migrationStatusService.updateStatusesAndDates(applicationsForUpdate.map { it.id },

@@ -45,7 +45,6 @@ class MigrationStatusServiceImpl(
         migrationStatusRepository.updateStatuses(applicationIds, statusCode)
     }
 
-    @Transactional
     override fun updateStatusesAndDates(applicationIds: List<UUID>, statusCode: Int) {
         migrationStatusRepository.updateStatusesAndDates(applicationIds, statusCode)
     }
