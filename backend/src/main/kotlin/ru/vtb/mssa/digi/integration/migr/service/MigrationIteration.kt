@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional
 import ru.vtb.mssa.digi.integration.migr.client.IntegrationAflClient
 import ru.vtb.mssa.digi.integration.migr.mapper.SendProductStatusMapper
 import ru.vtb.mssa.digi.integration.migr.model.enum.MigrationStatus
+import ru.vtb.mssa.digi.integration.migr.service.MigrationService.Companion.failed
+import ru.vtb.mssa.digi.integration.migr.service.MigrationService.Companion.successful
 import java.util.*
 
 @Service
@@ -20,21 +22,19 @@ class MigrationIteration(
 ) {
     companion object {
         private val log: Logger = LoggerFactory.getLogger(MigrationIteration::class.java)
-        private var successful: Int = 0
-        private var failed: Int = 0
         private var REQUEST_RER_SECOND: Int = 100
     }
 
 
     @Transactional
-    fun findAndFilterApplicationIdsToMigrate(): Boolean {
+    fun migrateApplications(): Boolean {
         val applicationIds =
             ArrayList(migrationStatusService.findIdsByStatus(MigrationStatus.READY_TO_MIGRATE.statusCode))
         val appIdsInPublishStatusTopic: List<UUID> = queueService.getAppIdsInPublishStatusTopic()
         migrationStatusService.updateStatuses(appIdsInPublishStatusTopic,
             MigrationStatus.SENT_BY_THE_ORCHESTRATOR.statusCode)
         applicationIds.removeAll(appIdsInPublishStatusTopic)
-        log.debug("Valid applicationIds in ready status: count in portion: ${applicationIds.size}, ids: $applicationIds")
+        log.debug("Valid applicationIds in ready status: count in portion: ${applicationIds.size}")
         return if (applicationIds.isEmpty()) {
             false
         } else {
@@ -51,7 +51,7 @@ class MigrationIteration(
                         val application = applicationService.findApplication(applicationId)
                         val mdmId = aflService.getPartyUIdByUncId(application.clientUncId)
                         val productStatusRequest = sendProductStatusMapper.mapRequest(
-                            mdmId, application)
+                            applicationId, application)
                         aflClient.sendProductStatusRequestToAfl(mdmId.toString(),
                             applicationId.toString(),
                             productStatusRequest)
@@ -61,7 +61,8 @@ class MigrationIteration(
                         successful++
                     } catch (e: Exception) {
                         log.debug("Cannot migrate an application with id: $applicationId,  ${e.stackTraceToString()}")
-                        migrationStatusService.setErrorStatus(applicationId, e.message ?: e.stackTraceToString())
+                        migrationStatusService.setErrorStatus(applicationId,
+                            if (e.message.isNullOrBlank()) "" else e.message)
                         failed++
                     }
                 }

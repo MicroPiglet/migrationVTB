@@ -16,11 +16,12 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
+import java.util.UUID
 
 class SendProductStatusMapperTest {
     private val dataProducer = PrepareDataHelper()
     private val sendProductStatusMapper = SendProductStatusMapper()
-    private val appId = 12345L
+    private val appId = UUID.fromString("fd5ea053-a0d3-4463-b95e-3f3c3ceed8f8")
     private lateinit var applicationRepository: ApplicationRepository
     private val date1 = OffsetDateTime.of(LocalDateTime.parse("2020-07-30 21:40:45.882",
         DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")), OffsetDateTime.now().offset)

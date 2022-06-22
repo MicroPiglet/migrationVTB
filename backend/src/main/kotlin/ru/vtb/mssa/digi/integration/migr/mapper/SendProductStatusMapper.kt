@@ -12,6 +12,7 @@ import ru.vtb.mssa.digi.integration.migr.service.impl.ApplicationServiceImpl
 import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.ZoneId
+import java.util.*
 import javax.xml.datatype.XMLGregorianCalendar
 import kotlin.streams.toList
 
@@ -22,7 +23,7 @@ class SendProductStatusMapper {
     }
 
     fun mapRequest(
-        mdmId: Long, application: Application,
+        applicationId: UUID, application: Application,
     ): SendProductStatusRequest {
         return SendProductStatusRequest(
             status = StatusMapper.map(application.status.name)!!,
@@ -39,7 +40,7 @@ class SendProductStatusMapper {
                 offerId = null,
                 product = application.bestChoiceResult?.productList?.stream()?.map { productBC ->
                     Product(
-                        type = application.typeCode!!,
+                        type = application.typeCode.toString(),
                         amount = productBC.cashAmount.toString(),
                         totalAmount = (if (StatusMapper.map(application.status.name) == AflStatus.SCORING.toString()
                             || StatusMapper.map(application.status.name) == AflStatus.DRAFT.toString()
@@ -55,7 +56,7 @@ class SendProductStatusMapper {
                         payment = productBC.payment.toString(),
                         term = productBC.term
                     )
-                }?.toList()).also { log.debug("Mapped SendProductStatusRequest: $it.t") })
+                }?.toList()).also { log.debug("Mapped SendProductStatusRequest with applicationId $applicationId: SendProductStatusRequest: $it") })
 
     }
 

@@ -1,7 +1,5 @@
 package ru.vtb.mssa.digi.integration.migr.service.impl
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import ru.vtb.mssa.digi.integration.migr.exception.InvalidResponseException
@@ -13,12 +11,14 @@ import ru.vtb.mssa.digi.integration.migr.model.enum.MigrationStatus
 import ru.vtb.mssa.digi.integration.migr.repository.ApplicationRepository
 import ru.vtb.mssa.digi.integration.migr.service.ApplicationService
 import ru.vtb.mssa.digi.integration.migr.service.MigrationStatusService
+import ru.vtb.mssa.digi.integration.migr.validation.ApplicationValidator
 import java.util.*
 
 @Service
 class ApplicationServiceImpl(
     private val applicationRepository: ApplicationRepository,
     private val migrationStatusService: MigrationStatusService,
+    private val applicationValidator: ApplicationValidator,
 ) : ApplicationService {
 
     @Transactional
@@ -47,8 +47,12 @@ class ApplicationServiceImpl(
         }
     }
 
-    override fun findApplication(id: UUID): Application = applicationRepository.findOne(id)
-        ?: throw InvalidResponseException("Application not found in loanorc.application table, applicationId=${id}")
+    override fun findApplication(id: UUID): Application {
+        val application: Application = applicationRepository.findOne(id)
+            ?: throw InvalidResponseException("Application not found in loanorc.application table, applicationId=${id}")
+        applicationValidator.verifyApplicationFields(application)
+        return application
+    }
 
     override fun findByStatusSetAtDaysBefore(status: ApplicationStatus, days: Int): List<MigrationStatusDao> =
         applicationRepository.findByStatusSetAtDaysBefore(status, days)

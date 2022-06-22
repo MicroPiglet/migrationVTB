@@ -33,9 +33,17 @@ class ApplicationRepositoryImpl(
         }
         namedParameterJdbcTemplate.query(
             """
-            select ap.*,
+            select ap.id,
+                ap.client_unc_id,
+                 ap.type_code,
+                 ap.create_date,
+                 ap.scoring_result,
+                 ap.scoring_request,
+                 ap.best_choice_result,
+                 ap.marker,
+                 ap.type_code,
              ason.status as status,
-             ason.update_date as status_change_date
+             ason.update_date as update_date
             from loanorc.application as ap
                      left join loanorc.application_status as ason
                                on ap.application_status_id = ason.id
@@ -64,6 +72,13 @@ class ApplicationRepositoryImpl(
             from loanorc.application as ap
             left join loanorc.application_status as ason
             on ap.application_status_id = ason.id
+            and ason.application_id  in (
+                SELECT as2.application_id 
+                FROM loanorc.application_status as2 
+                LEFT JOIN loanorc.application_status as3        
+                ON as2.application_id  = as3.application_id 
+                AND as2.update_date < as3.update_date 
+                WHERE as3.update_date  is null)
             where ason.status = :statusName
             and (:curDate - date(ason.update_date) + 1) between 0 and :days
             AND ap.id NOT IN (select id from loanorc.t1)
@@ -88,6 +103,13 @@ class ApplicationRepositoryImpl(
             from loanorc.application as ap
             left join loanorc.application_status as ason
             on ap.application_status_id = ason.id
+            and ason.application_id  in (
+                SELECT as2.application_id 
+                FROM loanorc.application_status as2 
+                LEFT JOIN loanorc.application_status as3        
+                ON as2.application_id  = as3.application_id 
+                AND as2.update_date < as3.update_date 
+                WHERE as3.update_date  is null)
             where ason.status = :statusName
             AND ap.id NOT IN (select id from loanorc.t1)
             """.trimIndent(),
@@ -102,12 +124,20 @@ class ApplicationRepositoryImpl(
         val result: MutableList<MigrationStatusDao> = arrayListOf()
         namedParameterJdbcTemplate.query(
             """
-                select t1.*
+                select ap.id,
+                ason.update_date 
                 from loanorc.application as ap 
                 join loanorc.application_status as ason
                 on ap.application_status_id = ason.id
                 join loanorc.t1 as t1 
                 on ap.id = t1.id
+                and ason.application_id  in (
+                SELECT as2.application_id 
+                FROM loanorc.application_status as2 
+                LEFT JOIN loanorc.application_status as3        
+                ON as2.application_id  = as3.application_id 
+                AND as2.update_date < as3.update_date 
+                WHERE as3.update_date  is null)
                 where ason.update_date != t1.update_date 
                 """.trimIndent(),
         ) {
@@ -115,7 +145,6 @@ class ApplicationRepositoryImpl(
         }
         return result
     }
-
 
     private fun processApplicationRow(it: ResultSet): Application {
         val id = it.getString("id")
@@ -139,7 +168,7 @@ class ApplicationRepositoryImpl(
         val typeCode = it.getString("type_code")
 
 
-                return Application(
+        return Application(
             id = UUID.fromString(id),
             clientUncId = clientUncId,
             type = ApplicationType.valueOf(type),
@@ -163,5 +192,4 @@ class ApplicationRepositoryImpl(
             updateDate = updateDate,
         )
     }
-
 }

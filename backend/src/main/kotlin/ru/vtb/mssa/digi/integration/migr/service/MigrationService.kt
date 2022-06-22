@@ -11,13 +11,12 @@ import kotlin.system.exitProcess
 class MigrationService(
     private val applicationService: ApplicationService,
     private val migrationIteration: MigrationIteration,
-
 ) : CommandLineRunner {
 
     companion object {
         private val log: Logger = LoggerFactory.getLogger(ApplicationServiceImpl::class.java)
-        private var successful: Int = 0
-        private var failed: Int = 0
+        var successful: Int = 0
+        var failed: Int = 0
     }
 
     override fun run(vararg args: String?) {
@@ -27,12 +26,11 @@ class MigrationService(
             log.debug("Cannot migrate an applications, message:  ${e.message} \n cause: ${e.cause} \n stackTraceToString: ${e.stackTraceToString()}")
         }
 
-        while (migrationIteration.findAndFilterApplicationIdsToMigrate()) {
-            log.debug("Applications in ready status not exist")
-            log.debug("Successfully sent applications total: $successful , failed: $failed ")
+        while (migrationIteration.migrateApplications()) {
+            log.debug("All applications in ready status was processed")
         }
+        log.debug("Successfully sent applications total: $successful , failed: $failed ")
         exitProcess(0)
-
     }
 
     fun prepareMigrationStatusTable() {

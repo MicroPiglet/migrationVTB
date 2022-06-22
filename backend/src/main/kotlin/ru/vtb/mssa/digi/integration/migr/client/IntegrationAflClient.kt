@@ -54,7 +54,8 @@ class IntegrationAflClient(
 
     private fun throwExceptionIfIntegrationMdmIsUnavailable(e: HttpStatusCodeException): Nothing {
         throw ExternalServiceUnavailableException(
-            "Error during afl invocation! Body: ${e.responseBodyAsString}")
+            "Error during afl invocation! Body:" +
+                    if (e.responseBodyAsString.length >= 215) e.responseBodyAsString else e.responseBodyAsString.substring(0, 215))
     }
 
     private fun String.asUri() = UriComponentsBuilder

@@ -1,10 +1,7 @@
 package ru.vtb.mssa.digi.integration.migr.exception
 
-import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.JsonProcessingException
-import com.fasterxml.jackson.databind.JsonMappingException
 import org.slf4j.LoggerFactory
-import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.MissingPathVariableException
@@ -12,7 +9,6 @@ import org.springframework.web.bind.MissingServletRequestParameterException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
-
 import javax.servlet.http.HttpServletRequest
 import javax.validation.ConstraintViolationException
 import javax.validation.constraints.NotBlank
@@ -85,7 +81,8 @@ class ExceptionHandler {
     ) {
         log.error(CAUGHT_MESSAGE, exception)
         throw when (val cause = exception.cause) {
-            is JsonProcessingException -> InvalidFieldException(cause.toString())
+            is JsonProcessingException -> InvalidFieldException(if (cause.toString().length >= 255) cause.toString() else cause.toString()
+                .substring(0, 255))
             else -> {
                 throw InvalidFieldException(exception.message)
             }
