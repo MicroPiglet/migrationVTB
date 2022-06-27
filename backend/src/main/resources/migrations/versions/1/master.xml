@@ -7,6 +7,7 @@
 
     <changeSet id="1-create-table-t1.sql" author="feelz" runInTransaction="false">
         <sqlFile path="1-create-table-t1.sql" splitStatements="false" relativeToChangelogFile="true"/>
+        <sqlFile path="2-add-t1-indexes.sql" splitStatements="false" relativeToChangelogFile="true"/>
     </changeSet>
 
 </databaseChangeLog>

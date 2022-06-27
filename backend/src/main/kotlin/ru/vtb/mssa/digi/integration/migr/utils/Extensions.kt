@@ -39,3 +39,5 @@ fun LocalDateTime.toXmlDateTime(): XMLGregorianCalendar {
     val gcal = GregorianCalendar.from(this.atZone(ZoneId.systemDefault()))
     return DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal)
 }
+
+internal fun String.toUUID(): UUID = UUID.fromString(this)

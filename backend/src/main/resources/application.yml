@@ -1,3 +1,8 @@
+debug:
+  datasource:
+    proxy:
+      enabled: true
+
 spring:
   application:
     name: mscl-issu-integration-router
@@ -13,9 +18,9 @@ spring:
         default_schema: loanorc
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${LOANORC_DB_URL:jdbc:postgresql://127.0.0.1:5432/loanorc}
-    username: ${LOANORC_DB_USER:postgres}
-    password: ${LOANORC_DB_PASSWORD:root}
+    url: ${loanorc_DB_URL:jdbc:postgresql://127.0.0.1:5432/postgres}
+    username: ${loanorc_DB_USER:postgres}
+    password: ${loanorc_DB_PASSWORD:root}
     hikari:
       minimum-pool-size: ${HIKARI_MIN_POOL_SIZE:1}
       maximum-pool-size: ${HIKARI_MAX_POOL_SIZE:50}
@@ -32,7 +37,7 @@ spring:
 
 endpoint:
   afl:
-    url: http://localhost:8086/
+    url: http://localhost:8087/
     readTimeout: 30s
     connectionTimeout: 30s
   mdm:

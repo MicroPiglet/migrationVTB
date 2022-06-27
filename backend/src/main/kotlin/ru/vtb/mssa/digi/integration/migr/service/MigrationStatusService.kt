@@ -13,6 +13,6 @@ interface MigrationStatusService {
     fun updateStatus(applicationId: UUID, statusCode: Int)
     fun updateStatuses(applicationIds: List<UUID>, statusCode: Int)
     fun updateStatusesAndDates(applicationIds: List<UUID>, statusCode: Int)
-    fun setErrorStatus(id: UUID, errorDescription: String?)
+    fun setErrorStatus(id: UUID, errorDescription: String)
 
 }

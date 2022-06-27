@@ -15,7 +15,7 @@ import java.util.*
 interface MigrationStatusRepository : JpaRepository<MigrationStatusT1, UUID> {
 
     @Query(value = "select CAST(id AS VARCHAR) from loanorc.t1 where application_migration_status = :status " +
-            "order by id LIMIT 3000 for update skip locked", nativeQuery = true)
+            "order by id LIMIT 300 for update skip locked", nativeQuery = true)
     fun findIdsByStatus(@Param("status") status: Int): List<UUID>
 
     fun countMigrationStatusT1ByMigrationStatus(status: Int): Long

@@ -1,5 +1,7 @@
 package ru.vtb.mssa.digi.integration.migr.service.impl
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import ru.vtb.mssa.digi.integration.migr.exception.InvalidResponseException
@@ -21,23 +23,27 @@ class ApplicationServiceImpl(
     private val applicationValidator: ApplicationValidator,
 ) : ApplicationService {
 
+    companion object {
+        private val log: Logger = LoggerFactory.getLogger(ApplicationServiceImpl::class.java)
+    }
     @Transactional
-    override fun prepareApplicationsForMigration(): ArrayList<MigrationStatusDao> {
-        val applicationsForMigration = ArrayList<MigrationStatusDao>(emptyList())
+    override fun prepareApplicationsForMigration() {
+        log.debug("Start preparing applications for migration ")
 
         for (entry: Map.Entry<ApplicationStatus, Int?> in ApplicationStatus.enumMap) {
             val apps = findByStatusAndDays(entry.key, entry.value)
-            applicationsForMigration.addAll(ArrayList(apps))
+            apps.forEach {
+                val migrationStatus = MigrationStatusT1(
+                    it.id,
+                    it.updateDate,
+                    MigrationStatus.READY_TO_MIGRATE.statusCode,
+                )
+                migrationStatusService.save(migrationStatus)
+            }
+            log.debug("Successfully prepared (saved to loanorc.t1 table) applications in status ${entry.key} ")
+
         }
-        applicationsForMigration.forEach {
-            val migrationStatus = MigrationStatusT1(
-                it.id,
-                it.updateDate,
-                MigrationStatus.READY_TO_MIGRATE.statusCode,
-            )
-            migrationStatusService.save(migrationStatus)
-        }
-        return applicationsForMigration
+        log.debug("Preparing applications for migration finished")
     }
 
     override fun findByStatusAndDays(status: ApplicationStatus, days: Int?): List<MigrationStatusDao> {
@@ -62,9 +68,12 @@ class ApplicationServiceImpl(
 
     @Transactional
     override fun prepareUpdatedApplications(): List<MigrationStatusDao> {
+        log.debug("Start updating applications for migration in loanorc.t1 table ")
         val applicationsForUpdate: List<MigrationStatusDao> = applicationRepository.findUpdatedApplications()
         migrationStatusService.updateStatusesAndDates(applicationsForUpdate.map { it.id },
             MigrationStatus.READY_TO_MIGRATE.statusCode)
+        log.debug("Updating applications for migration in loanorc.t1 table finished")
+
         return applicationsForUpdate
     }
 }

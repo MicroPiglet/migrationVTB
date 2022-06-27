@@ -27,7 +27,7 @@ class MigrationService(
         }
 
         while (migrationIteration.migrateApplications()) {
-            log.debug("All applications in ready status was processed")
+            log.debug("Preparing applications in process")
         }
         log.debug("Successfully sent applications total: $successful , failed: $failed ")
         exitProcess(0)

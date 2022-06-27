@@ -62,7 +62,7 @@ class MigrationIteration(
                     } catch (e: Exception) {
                         log.debug("Cannot migrate an application with id: $applicationId,  ${e.stackTraceToString()}")
                         migrationStatusService.setErrorStatus(applicationId,
-                            if (e.message.isNullOrBlank()) "" else e.message)
+                            if (e.message.isNullOrBlank())"" else {e.message!!})
                         failed++
                     }
                 }

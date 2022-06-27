@@ -17,6 +17,8 @@
 		<integration.mdm-api.version>1.2.27</integration.mdm-api.version>
 		<integration.creditconfigurator.version>3.1.8</integration.creditconfigurator.version>
 		<mockito.kotlin.version>3.2.0</mockito.kotlin.version>
+		<datasource-proxy.version>1.4.9</datasource-proxy.version>
+
 
 	</properties>
 
@@ -98,6 +100,11 @@
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
 			<version>${springdoc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.ttddyy</groupId>
+			<artifactId>datasource-proxy</artifactId>
+			<version>${datasource-proxy.version}</version>
 		</dependency>
 
 		<!-- Test -->

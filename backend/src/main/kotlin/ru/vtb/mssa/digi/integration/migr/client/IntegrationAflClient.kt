@@ -1,7 +1,11 @@
 package ru.vtb.mssa.digi.integration.migr.client
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
@@ -15,7 +19,8 @@ import ru.vtb.mssa.digi.integration.migr.properties.RestClientProperties
 class IntegrationAflClient(
     restTemplateBuilder: RestTemplateBuilder,
     restClientProperties: RestClientProperties,
-) {
+    @Qualifier("aflClientJsonObjectMapper") val objectMapper: ObjectMapper
+    ) {
 
     private val restTemplate: RestTemplate
     private val property: RestClientProperties.RestClientProperty
@@ -34,13 +39,14 @@ class IntegrationAflClient(
         applicationId: String,
         request: SendProductStatusRequest,
     ) = try {
-        val httpEntity = HttpEntity(request)
+        objectMapper.writeValueAsString(request)
+        val httpEntity = HttpEntity(objectMapper.writeValueAsString(request), httpHeaders())
         val path = CROSS_REFERENCES_BY_EXTERNAL_ID.plus(mdmId).plus("/").plus(applicationId)
 
         restTemplate.postForEntity(
             path.asUri(),
             httpEntity,
-            Unit::class.java
+            SendProductStatusRequest::class.java
         ).statusCode.let {
             when (it.isError) {
                 false -> it
@@ -53,13 +59,20 @@ class IntegrationAflClient(
 
 
     private fun throwExceptionIfIntegrationMdmIsUnavailable(e: HttpStatusCodeException): Nothing {
+
         throw ExternalServiceUnavailableException(
             "Error during afl invocation! Body:" +
-                    if (e.responseBodyAsString.length >= 215) e.responseBodyAsString else e.responseBodyAsString.substring(0, 215))
+                    e.responseBodyAsString)
     }
 
     private fun String.asUri() = UriComponentsBuilder
         .fromHttpUrl(property.url)
         .path(this)
         .toUriString()
+
+    private fun httpHeaders(): HttpHeaders {
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.APPLICATION_JSON
+        return headers
+    }
 }

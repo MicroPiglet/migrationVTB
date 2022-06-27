@@ -15,8 +15,11 @@ import javax.transaction.Transactional
 @Service
 class MigrationStatusServiceImpl(
     val migrationStatusRepository: MigrationStatusRepository,
-    private val queueService: QueueService,
 ) : MigrationStatusService {
+
+    companion object {
+        private val log: Logger = LoggerFactory.getLogger(ApplicationServiceImpl::class.java)
+    }
 
     override fun findIdsByStatus(status: Int): List<UUID> {
         return migrationStatusRepository.findIdsByStatus(status)
@@ -24,7 +27,9 @@ class MigrationStatusServiceImpl(
 
     @Transactional
     override fun save(migrationStatus: MigrationStatusT1): MigrationStatusT1 {
-        return migrationStatusRepository.save(migrationStatus)
+        return migrationStatusRepository.save(migrationStatus).also {
+            log.debug("Successfully saved to loanorc.t1 table. MigrationStatus:  ${migrationStatus.id} ")
+        }
     }
 
     override fun findAll(): List<MigrationStatusT1> {
@@ -46,11 +51,15 @@ class MigrationStatusServiceImpl(
     }
 
     override fun updateStatusesAndDates(applicationIds: List<UUID>, statusCode: Int) {
-        migrationStatusRepository.updateStatusesAndDates(applicationIds, statusCode)
+        migrationStatusRepository.updateStatusesAndDates(applicationIds, statusCode).also {
+            log.debug("Successfully updated statuses in loanorc.t1 table for applications:  $applicationIds ")
+        }
     }
 
     @Transactional
-    override fun setErrorStatus(id: UUID, errorDescription: String?) {
-        migrationStatusRepository.setErrorStatus(id, "${HttpStatus.INTERNAL_SERVER_ERROR} $errorDescription")
+    override fun setErrorStatus(id: UUID, errorDescription: String) {
+        migrationStatusRepository.setErrorStatus(id, "${HttpStatus.INTERNAL_SERVER_ERROR}" +
+            if (errorDescription.length <= 210) errorDescription else errorDescription.substring(0, 209)
+        )
     }
 }

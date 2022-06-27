@@ -81,8 +81,7 @@ class ExceptionHandler {
     ) {
         log.error(CAUGHT_MESSAGE, exception)
         throw when (val cause = exception.cause) {
-            is JsonProcessingException -> InvalidFieldException(if (cause.toString().length >= 255) cause.toString() else cause.toString()
-                .substring(0, 255))
+            is JsonProcessingException -> InvalidFieldException(cause.toString())
             else -> {
                 throw InvalidFieldException(exception.message)
             }

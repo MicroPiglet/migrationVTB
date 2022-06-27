@@ -2,7 +2,10 @@ package ru.vtb.mssa.digi.integration.migr.repository
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import config.toUUID
 import org.postgresql.util.PGobject
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
@@ -13,6 +16,7 @@ import ru.vtb.mssa.digi.integration.migr.model.db.Application
 import ru.vtb.mssa.digi.integration.migr.model.db.ApplicationMarker
 import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus
 import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationType
+import ru.vtb.mssa.digi.integration.migr.service.impl.ApplicationServiceImpl
 import ru.vtb24.enterpriseobjectlibrary.business.common.services.loanapplicationscoring.v1.LoanApplicationScoringEBMType
 import ru.vtb24.enterpriseobjectlibrary.business.common.services.publishpersonloanapplicationstatus.v2.PublishPersonLoanApplicationStatusEBM
 import java.sql.ResultSet
@@ -25,6 +29,10 @@ class ApplicationRepositoryImpl(
     val namedParameterJdbcTemplate: NamedParameterJdbcTemplate,
     @Qualifier("jsonbObjectMapper") val objectMapper: ObjectMapper,
 ) : ApplicationRepository {
+
+    companion object {
+        private val log: Logger = LoggerFactory.getLogger(ApplicationServiceImpl::class.java)
+    }
 
     override fun findOne(applicationId: UUID): Application? {
         var result: Application? = null
@@ -62,26 +70,23 @@ class ApplicationRepositoryImpl(
             addValue("statusName", status.name, OTHER)
             addValue("days", days)
             addValue("curDate", Timestamp(System.currentTimeMillis()))
+            addValue("lastUpdatedApplicationStatusIds", findLastUpdatedApplicationStatusIds().map { it }, OTHER)
 
         }
         val result: MutableList<MigrationStatusDao> = arrayListOf()
         namedParameterJdbcTemplate.query(
             """
             select ap.id,
-            ason.update_date 
+            ason.update_date
             from loanorc.application as ap
             left join loanorc.application_status as ason
             on ap.application_status_id = ason.id
-            and ason.application_id  in (
-                SELECT as2.application_id 
-                FROM loanorc.application_status as2 
-                LEFT JOIN loanorc.application_status as3        
-                ON as2.application_id  = as3.application_id 
-                AND as2.update_date < as3.update_date 
-                WHERE as3.update_date  is null)
-            where ason.status = :statusName
+            full outer join loanorc.t1 as t1
+            on ap.id  = t1.id
+            and ason.id in (:lastUpdatedApplicationStatusIds)
+            and ap.id NOT in (t1.id)
+            and ason.status = :statusName      
             and (:curDate - date(ason.update_date) + 1) between 0 and :days
-            AND ap.id NOT IN (select id from loanorc.t1)
                 """.trimIndent(),
             param
         ) {
@@ -94,24 +99,22 @@ class ApplicationRepositoryImpl(
     override fun findByStatus(status: ApplicationStatus): List<MigrationStatusDao> {
         val param = MapSqlParameterSource().apply {
             addValue("statusName", status.name, OTHER)
+            addValue("lastUpdatedApplicationStatusIds", findLastUpdatedApplicationStatusIds().map { it }, OTHER)
         }
+
         val result: MutableList<MigrationStatusDao> = arrayListOf()
         namedParameterJdbcTemplate.query(
             """
             select ap.id,
-            ason.update_date 
+            ason.update_date
             from loanorc.application as ap
             left join loanorc.application_status as ason
             on ap.application_status_id = ason.id
-            and ason.application_id  in (
-                SELECT as2.application_id 
-                FROM loanorc.application_status as2 
-                LEFT JOIN loanorc.application_status as3        
-                ON as2.application_id  = as3.application_id 
-                AND as2.update_date < as3.update_date 
-                WHERE as3.update_date  is null)
-            where ason.status = :statusName
-            AND ap.id NOT IN (select id from loanorc.t1)
+            full outer join loanorc.t1 as t1
+            on ap.id  = t1.id
+            and ason.id in (:lastUpdatedApplicationStatusIds)
+            and ap.id NOT in (t1.id)
+            and ason.status = :statusName
             """.trimIndent(),
             param
         ) {
@@ -121,7 +124,11 @@ class ApplicationRepositoryImpl(
     }
 
     override fun findUpdatedApplications(): List<MigrationStatusDao> {
+        val param = MapSqlParameterSource().apply {
+            addValue("lastUpdatedApplicationStatusIds", findLastUpdatedApplicationStatusIds().map { it }, OTHER)
+        }
         val result: MutableList<MigrationStatusDao> = arrayListOf()
+
         namedParameterJdbcTemplate.query(
             """
                 select ap.id,
@@ -131,17 +138,33 @@ class ApplicationRepositoryImpl(
                 on ap.application_status_id = ason.id
                 join loanorc.t1 as t1 
                 on ap.id = t1.id
-                and ason.application_id  in (
-                SELECT as2.application_id 
-                FROM loanorc.application_status as2 
-                LEFT JOIN loanorc.application_status as3        
-                ON as2.application_id  = as3.application_id 
-                AND as2.update_date < as3.update_date 
-                WHERE as3.update_date  is null)
+                and ason.id  in (:lastUpdatedApplicationStatusIds)
                 where ason.update_date != t1.update_date 
                 """.trimIndent(),
+            param
         ) {
             result.add(processMigrationStatus(it))
+        }
+        return result
+    }
+
+    fun findLastUpdatedApplicationStatusIds(): List<UUID> {
+        val result: MutableList<UUID> = arrayListOf()
+
+        namedParameterJdbcTemplate.query(
+            """
+                select ason.id 
+                from loanorc.application_status ason
+                where  ason.id in (
+                SELECT as2.id 
+                FROM loanorc.application_status as2 
+                LEFT JOIN loanorc.application_status as3        
+                ON as2.id  = as3.id 
+                AND as2.update_date < as3.update_date 
+                WHERE as3.update_date  is null)
+                """.trimIndent(),
+        ) {
+            result.add(it.getString("id").toUUID())
         }
         return result
     }
@@ -184,6 +207,8 @@ class ApplicationRepositoryImpl(
     }
 
     private fun processMigrationStatus(it: ResultSet): MigrationStatusDao {
+        log.debug("processMigrationStatus ${it.getString("id")}")
+
         val id = it.getString("id")
         val updateDate = it.getTimestamp("update_date")
 

@@ -45,7 +45,8 @@ class IntegrationMdmClient(restTemplateBuilder: RestTemplateBuilder,
 
     private fun throwExceptionIfIntegrationMdmIsUnavailable(e: HttpStatusCodeException): Nothing {
         throw ExternalServiceUnavailableException(
-                "Error during integration-mdm-v2 invocation! Body: ${e.responseBodyAsString}")
+                "Error during integration-mdm-v2 invocation! Body: " +
+                        e.responseBodyAsString)
     }
 
     private fun String.asUri() = UriComponentsBuilder
