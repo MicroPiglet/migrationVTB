@@ -58,7 +58,7 @@ class MigrationStatusServiceImpl(
 
     @Transactional
     override fun setErrorStatus(id: UUID, errorDescription: String) {
-        migrationStatusRepository.setErrorStatus(id, "${HttpStatus.INTERNAL_SERVER_ERROR}" +
+        migrationStatusRepository.setErrorStatus(id, "${HttpStatus.INTERNAL_SERVER_ERROR} " +
             if (errorDescription.length <= 210) errorDescription else errorDescription.substring(0, 209)
         )
     }

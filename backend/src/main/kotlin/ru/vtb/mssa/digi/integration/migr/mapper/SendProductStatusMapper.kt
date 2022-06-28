@@ -31,7 +31,7 @@ class SendProductStatusMapper {
             stage = application.status.toString(),
             creationChannel = Data.CreationChannel.valueOf(
                 CreationChannelMapper.map(
-                    application.scoringRequest.dataArea.loanApplicationEBO.saleChannel.value
+                    application.scoringRequest!!.dataArea.loanApplicationEBO.saleChannel.value
                 )!!
             ),
             scoringDate = xmlGregorianCalendarToOffsetDateTime(application.scoringRequest?.dataArea?.loanApplicationEBO?.auditHistory?.createdDateTime),
@@ -70,7 +70,7 @@ class SendProductStatusMapper {
         else null
     }
 
-    private fun xmlGregorianCalendarToOffsetDateTime(xmlGregorianCalendar: XMLGregorianCalendar): OffsetDateTime? {
-        return xmlGregorianCalendar.toGregorianCalendar().toZonedDateTime().toOffsetDateTime()
+    private fun xmlGregorianCalendarToOffsetDateTime(xmlGregorianCalendar: XMLGregorianCalendar?): OffsetDateTime? {
+        return xmlGregorianCalendar?.toGregorianCalendar()?.toZonedDateTime()?.toOffsetDateTime()
     }
 }

@@ -39,7 +39,7 @@ class StatusMapper {
             return when (status) {
                 null -> null
                 else -> converterMap[status]
-                    ?: throw InvalidParameterException("INTEGRATION_VALIDATION_ERROR ApplicationStatus Invalid field format Value: $status: ApplicationStatus -> dto: AflStatus")
+                    ?: throw InvalidParameterException("Application status not approved for migration. Status: $status, ApplicationStatus -> dto: AflStatus")
             }
         }
     }
