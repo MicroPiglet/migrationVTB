@@ -25,46 +25,49 @@ class SendProductStatusMapper {
     fun mapRequest(
         applicationId: UUID, application: Application,
     ): SendProductStatusRequest {
-        return SendProductStatusRequest(
-            status = StatusMapper.map(application.status.name)!!,
-            data = Data(
-                created = application.createDate.atOffset(OffsetDateTime.now().offset),
-                updated = application.updateDate.atOffset(OffsetDateTime.now().offset),
-                stage = application.status.toString(),
-                creationChannel = Data.CreationChannel.valueOf(CreationChannelMapper.map(application.scoringRequest?.dataArea
-                    ?.loanApplicationEBO?.saleChannel?.value)!!),
-                scoringDate = xmlGregorianCalendarToOffsetDateTime(application.scoringRequest?.dataArea?.loanApplicationEBO?.auditHistory?.createdDateTime!!),
-                endDate = XmlGregorianCalendarToLocalDate(
-                    application.scoringResult?.dataArea?.loanApplicationEBO?.desicionReport?.first()!!.decisionEndDate
-                ),
-                offerId = null,
-                product = application.bestChoiceResult?.productList?.stream()?.map { productBC ->
-                    Product(
-                        type = application.typeCode.toString(),
-                        amount = productBC.cashAmount.toString(),
-                        totalAmount = (if (StatusMapper.map(application.status.name) == AflStatus.SCORING.toString()
-                            || StatusMapper.map(application.status.name) == AflStatus.DRAFT.toString()
-                        ) {
-                            productBC.cashAmount.toString()
-                        } else {
-                            productBC.totalAmount.toString()
-                        }),
-                        crossSales = false,
-                        dateIssue = application.marker?.loanContractMarker?.issueDate?.atStartOfDay(ZoneId.systemDefault())
-                            ?.toOffsetDateTime(),
-                        rate = productBC.rate.toString(),
-                        payment = productBC.payment.toString(),
-                        term = productBC.term
-                    )
-                }?.toList()).also { log.debug("Mapped SendProductStatusRequest with applicationId $applicationId: SendProductStatusRequest: $it") })
+        return SendProductStatusRequest(status = StatusMapper.map(application.status.name)!!, data = Data(
+            created = application.createDate.atOffset(OffsetDateTime.now().offset),
+            updated = application.updateDate.atOffset(OffsetDateTime.now().offset),
+            stage = application.status.toString(),
+            creationChannel = Data.CreationChannel.valueOf(
+                CreationChannelMapper.map(
+                    application.scoringRequest.dataArea.loanApplicationEBO.saleChannel.value
+                )!!
+            ),
+            scoringDate = xmlGregorianCalendarToOffsetDateTime(application.scoringRequest?.dataArea?.loanApplicationEBO?.auditHistory?.createdDateTime),
+            endDate = XmlGregorianCalendarToLocalDate(
+                application.scoringResult?.dataArea?.loanApplicationEBO?.desicionReport?.firstOrNull()?.decisionEndDate
+            ),
+            offerId = null,
+            product = application.bestChoiceResult?.productList?.stream()?.map { productBC ->
+                Product(
+                    type = application.typeCode.toString(),
+                    amount = productBC.cashAmount.toString(),
+                    totalAmount = (if (StatusMapper.map(application.status.name) == AflStatus.SCORING.toString() || StatusMapper.map(
+                            application.status.name
+                        ) == AflStatus.DRAFT.toString()
+                    ) {
+                        productBC.cashAmount.toString()
+                    } else {
+                        productBC.totalAmount.toString()
+                    }),
+                    crossSales = false,
+                    dateIssue = application.marker?.loanContractMarker?.issueDate?.atStartOfDay(ZoneId.systemDefault())
+                        ?.toOffsetDateTime(),
+                    rate = productBC.rate.toString(),
+                    payment = productBC.payment.toString(),
+                    term = productBC.term
+                )
+            }?.toList()
+        ).also { log.debug("Mapped SendProductStatusRequest with applicationId $applicationId: SendProductStatusRequest: $it") })
 
     }
 
-    private fun XmlGregorianCalendarToLocalDate(xmlGregorianCalendar: XMLGregorianCalendar): LocalDate? {
-        return LocalDate.of(
-            xmlGregorianCalendar.year,
-            xmlGregorianCalendar.month,
-            xmlGregorianCalendar.day);
+    private fun XmlGregorianCalendarToLocalDate(xmlGregorianCalendar: XMLGregorianCalendar?): LocalDate? {
+        return if (xmlGregorianCalendar != null) LocalDate.of(
+            xmlGregorianCalendar.year, xmlGregorianCalendar.month, xmlGregorianCalendar.day
+        )
+        else null
     }
 
     private fun xmlGregorianCalendarToOffsetDateTime(xmlGregorianCalendar: XMLGregorianCalendar): OffsetDateTime? {
