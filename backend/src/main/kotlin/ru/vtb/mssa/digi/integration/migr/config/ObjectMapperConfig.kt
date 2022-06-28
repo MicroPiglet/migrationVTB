@@ -37,6 +37,7 @@ class ObjectMapperConfig {
             )
         })
         setSerializationInclusion(JsonInclude.Include.NON_NULL)
+        setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
     }
 
     @Bean("aflClientJsonObjectMapper")

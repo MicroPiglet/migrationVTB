@@ -12,13 +12,13 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
 import ru.vtb.msa.integration.creditconfigurator.dto.CustomerChoiceResponse
 import ru.vtb.mssa.digi.integration.migr.model.dao.MigrationStatusDao
+import ru.vtb.mssa.digi.integration.migr.model.dao.PublishPersonLoanApplicationStatusEBMDto
 import ru.vtb.mssa.digi.integration.migr.model.db.Application
 import ru.vtb.mssa.digi.integration.migr.model.db.ApplicationMarker
 import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus
 import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationType
 import ru.vtb.mssa.digi.integration.migr.service.impl.ApplicationServiceImpl
 import ru.vtb24.enterpriseobjectlibrary.business.common.services.loanapplicationscoring.v1.LoanApplicationScoringEBMType
-import ru.vtb24.enterpriseobjectlibrary.business.common.services.publishpersonloanapplicationstatus.v2.PublishPersonLoanApplicationStatusEBM
 import java.sql.ResultSet
 import java.sql.Timestamp
 import java.sql.Types.OTHER
@@ -177,7 +177,7 @@ class ApplicationRepositoryImpl(
         val createDate = it.getTimestamp("create_date")
         val updateDate = it.getTimestamp("update_date")
         val scoringResp = (it.getObject("scoring_result") as PGobject?)?.value?.let {
-            objectMapper.readValue<PublishPersonLoanApplicationStatusEBM>(it)
+            objectMapper.readValue<PublishPersonLoanApplicationStatusEBMDto>(it)
         }
         val scoringReq = (it.getObject("scoring_request") as PGobject?)?.value?.let {
             objectMapper.readValue<LoanApplicationScoringEBMType>(it)

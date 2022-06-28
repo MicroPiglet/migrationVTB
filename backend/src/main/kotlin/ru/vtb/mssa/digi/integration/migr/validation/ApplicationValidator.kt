@@ -13,10 +13,6 @@ class ApplicationValidator {
 
     fun verifyApplicationFields(application: Application) {
         with(application) {
-            verifyCondition(scoringRequest == null, "application.scoringRequest")
-            verifyCondition(scoringRequest?.dataArea == null, "application.scoringRequest.dataArea")
-            verifyCondition(scoringRequest?.dataArea?.loanApplicationEBO == null,
-                "application.scoringRequest.dataArea.loanApplicationEBO")
             verifyCondition(scoringRequest?.dataArea?.loanApplicationEBO?.saleChannel == null,
                 "application.scoringRequest.dataArea.loanApplicationEBO.saleChannel")
             if (bestChoiceResult != null && bestChoiceResult!!.productList.isNotEmpty()) {
@@ -30,6 +26,8 @@ class ApplicationValidator {
                         "application.product.bestChoiceResult.productList.totalAmount")
                 }
             }
+            verifyCondition(scoringResult?.dataArea?.loanApplicationEBO?.desicionReport?.firstOrNull()?.decisionEndDate == null,
+                "application.scoringResult.dataArea.loanApplicationEBO.desicionReport.decisionEndDate -> endDate")
         }
     }
 }
