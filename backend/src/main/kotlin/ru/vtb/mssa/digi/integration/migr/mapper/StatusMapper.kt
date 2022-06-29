@@ -37,7 +37,7 @@ class StatusMapper {
 
         fun map(status: String?): String? {
             return when (status) {
-                null -> null
+                null -> throw InvalidParameterException("Application status is null")
                 else -> converterMap[status]
                     ?: throw InvalidParameterException("Application status not approved for migration. Status: $status, ApplicationStatus -> dto: AflStatus")
             }

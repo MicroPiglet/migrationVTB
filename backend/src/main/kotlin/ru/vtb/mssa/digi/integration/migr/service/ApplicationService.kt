@@ -11,6 +11,6 @@ interface ApplicationService {
     fun findByStatusAndDays(status: ApplicationStatus, days: Int?): List<MigrationStatusDao>
     fun findByStatusSetAtDaysBefore(status: ApplicationStatus, days: Int): List<MigrationStatusDao>
     fun findByStatus(status: ApplicationStatus): List<MigrationStatusDao>
-    fun prepareUpdatedApplications(): Collection<MigrationStatusDao>
+    fun prepareUpdatedApplications()
     fun prepareApplicationsForMigration()
 }

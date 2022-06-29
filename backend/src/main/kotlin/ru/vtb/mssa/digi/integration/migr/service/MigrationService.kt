@@ -29,13 +29,14 @@ class MigrationService(
         while (migrationIteration.migrateApplications()) {
             log.debug("Preparing applications in process")
         }
-        log.debug("Successfully sent applications total: $successful , failed: $failed ")
+        log.debug("Successfully migrated applications total: $successful , not migrated: $failed ")
         exitProcess(0)
     }
 
     fun prepareMigrationStatusTable() {
         applicationService.prepareApplicationsForMigration()
         applicationService.prepareUpdatedApplications()
+
     }
 
 

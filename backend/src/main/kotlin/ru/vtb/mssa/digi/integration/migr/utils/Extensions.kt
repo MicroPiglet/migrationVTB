@@ -19,17 +19,6 @@ internal fun XMLGregorianCalendar.toLocalDate(): LocalDate = LocalDate.of(this.y
 
 fun BigDecimal.format(): BigDecimal = this.setScale(2, FLOOR)
 
-internal suspend fun <K, V, T> Map<K, V>.mapToAsync(
-    context: CoroutineContext = EmptyCoroutineContext,
-    block: suspend (Map.Entry<K, V>) -> T,
-): List<Deferred<T>> {
-    return map {
-        withContext(coroutineContext) {
-            async(context) { block(it) }
-        }
-    }
-}
-
 fun LocalDate.toXmlDate(): XMLGregorianCalendar {
     val gcal = GregorianCalendar.from(this.atStartOfDay(ZoneId.systemDefault()))
     return DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal)

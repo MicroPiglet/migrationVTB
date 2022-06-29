@@ -9,6 +9,7 @@ import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
+import org.springframework.web.server.ResponseStatusException
 import org.springframework.web.util.UriComponentsBuilder
 import ru.vtb.mssa.digi.integration.migr.exception.ExternalServiceUnavailableException
 import ru.vtb.mssa.digi.integration.migr.model.SendProductStatusRequest
@@ -50,7 +51,7 @@ class IntegrationAflClient(
         ).statusCode.let {
             when (it.isError) {
                 false -> it
-                true -> throw NullPointerException("Error during integration-afl invocation! mdmId: $mdmId, applicationId: $applicationId")
+                true -> throw ResponseStatusException(it, "Error during integration-afl invocation! mdmId: $mdmId, applicationId: $applicationId")
             }
         }
     } catch (e: HttpStatusCodeException) {

@@ -9,6 +9,7 @@ import org.springframework.web.util.UriComponentsBuilder
 import ru.vtb.msa.integration.mdm.api.dto.model.RelativeCrossReferenceId
 import ru.vtb.msa.integration.mdm.api.dto.model.UserCrossReferencesDTO
 import ru.vtb.mssa.digi.integration.migr.exception.ExternalServiceUnavailableException
+import ru.vtb.mssa.digi.integration.migr.exception.InvalidResponseException
 import ru.vtb.mssa.digi.integration.migr.properties.RestClientProperties
 
 
@@ -37,7 +38,7 @@ class IntegrationMdmClient(restTemplateBuilder: RestTemplateBuilder,
                 httpEntity,
                 UserCrossReferencesDTO::class.java
         ).body
-                ?: throw NullPointerException("Cannot get cross references by uncId: $uncId")
+                ?: throw InvalidResponseException("Cannot get cross references by uncId: $uncId")
     } catch (e: HttpStatusCodeException) {
         throwExceptionIfIntegrationMdmIsUnavailable(e)
     }

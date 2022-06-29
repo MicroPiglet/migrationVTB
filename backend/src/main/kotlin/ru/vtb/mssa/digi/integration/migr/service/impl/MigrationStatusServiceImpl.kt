@@ -51,10 +51,14 @@ class MigrationStatusServiceImpl(
     }
 
     override fun updateStatusesAndDates(applicationIds: List<UUID>, statusCode: Int) {
-        migrationStatusRepository.updateStatusesAndDates(applicationIds, statusCode).also {
-            log.debug("Successfully updated statuses in loanorc.t1 table for applications:  $applicationIds ")
-        }
+        TODO("Not yet implemented")
     }
+
+//    override fun updateStatusesAndDates(applications: List<MigrationStatusT1>, statusCode: Int) {
+//        migrationStatusRepository.updateStatusesAndDates(applications, statusCode).also {
+//            log.debug("Successfully updated statuses in loanorc.t1 table")
+//        }
+//    }
 
     @Transactional
     override fun setErrorStatus(id: UUID, errorDescription: String) {

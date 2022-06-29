@@ -54,7 +54,7 @@ class ApplicationRepositoryImpl(
              ason.update_date as update_date
             from loanorc.application as ap
                      left join loanorc.application_status as ason
-                               on ap.application_status_id = ason.id
+                     on ap.id  = ason.application_id 
             where ap.id = :application_id
             """.trimIndent(),
             mapSqlParameterSource
@@ -77,20 +77,20 @@ class ApplicationRepositoryImpl(
         namedParameterJdbcTemplate.query(
             """
             select ap.id,
-            ason.update_date
+            ason.update_date, t1.id 
             from loanorc.application as ap
-            left join loanorc.application_status as ason
-            on ap.application_status_id = ason.id
-            full outer join loanorc.t1 as t1
-            on ap.id  = t1.id
+            join loanorc.application_status as ason
+            on ap.id  = ason.application_id 
             and ason.id in (:lastUpdatedApplicationStatusIds)
-            and ap.id NOT in (t1.id)
             and ason.status = :statusName      
+            left join loanorc.t1 as t1
+            on ap.id  = t1.id
+            where t1.id is NUll   
             and (:curDate - date(ason.update_date) + 1) between 0 and :days
                 """.trimIndent(),
             param
         ) {
-            result.add(processMigrationStatus(it))
+            if (it.getString("id")!= null){result.add(processMigrationStatus(it))}
         }
         return result
     }
@@ -106,19 +106,19 @@ class ApplicationRepositoryImpl(
         namedParameterJdbcTemplate.query(
             """
             select ap.id,
-            ason.update_date
+            ason.update_date, t1.id 
             from loanorc.application as ap
-            left join loanorc.application_status as ason
-            on ap.application_status_id = ason.id
-            full outer join loanorc.t1 as t1
-            on ap.id  = t1.id
+            join loanorc.application_status as ason
+            on ap.id  = ason.application_id 
             and ason.id in (:lastUpdatedApplicationStatusIds)
-            and ap.id NOT in (t1.id)
             and ason.status = :statusName
+            left join loanorc.t1 as t1
+            on ap.id  = t1.id
+            where t1.id is NUll
             """.trimIndent(),
             param
         ) {
-            result.add(processMigrationStatus(it))
+            if (it.getString("id")!= null){result.add(processMigrationStatus(it))}
         }
         return result
     }
@@ -131,19 +131,19 @@ class ApplicationRepositoryImpl(
 
         namedParameterJdbcTemplate.query(
             """
-                select ap.id,
-                ason.update_date 
-                from loanorc.application as ap 
-                join loanorc.application_status as ason
-                on ap.application_status_id = ason.id
-                join loanorc.t1 as t1 
-                on ap.id = t1.id
-                and ason.id  in (:lastUpdatedApplicationStatusIds)
-                where ason.update_date != t1.update_date 
+             select ap.id,
+            ason.update_date, t1.id 
+            from loanorc.application as ap
+            join loanorc.application_status as ason
+            on ap.id  = ason.application_id 
+            and ason.id in (:lastUpdatedApplicationStatusIds)
+            join loanorc.t1 as t1
+            on ap.id  = t1.id
+            where ason.update_date != t1.update_date 
                 """.trimIndent(),
             param
         ) {
-            result.add(processMigrationStatus(it))
+                result.add(processMigrationStatus(it))
         }
         return result
     }
@@ -153,15 +153,12 @@ class ApplicationRepositoryImpl(
 
         namedParameterJdbcTemplate.query(
             """
-                select ason.id 
-                from loanorc.application_status ason
-                where  ason.id in (
-                SELECT as2.id 
+                SELECT  as2.id
                 FROM loanorc.application_status as2 
                 LEFT JOIN loanorc.application_status as3        
-                ON as2.id  = as3.id 
+                ON as2.application_id  = as3.application_id 
                 AND as2.update_date < as3.update_date 
-                WHERE as3.update_date  is null)
+                WHERE as3.update_date  is null
                 """.trimIndent(),
         ) {
             result.add(it.getString("id").toUUID())
@@ -208,7 +205,6 @@ class ApplicationRepositoryImpl(
 
     private fun processMigrationStatus(it: ResultSet): MigrationStatusDao {
         log.debug("processMigrationStatus ${it.getString("id")}")
-
         val id = it.getString("id")
         val updateDate = it.getTimestamp("update_date")
 

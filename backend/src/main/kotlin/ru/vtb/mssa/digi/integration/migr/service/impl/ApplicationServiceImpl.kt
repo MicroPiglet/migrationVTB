@@ -25,7 +25,9 @@ class ApplicationServiceImpl(
 
     companion object {
         private val log: Logger = LoggerFactory.getLogger(ApplicationServiceImpl::class.java)
+        private var preparedTotal: Int = 0
     }
+
     @Transactional
     override fun prepareApplicationsForMigration() {
         log.debug("Start preparing applications for migration ")
@@ -39,11 +41,12 @@ class ApplicationServiceImpl(
                     MigrationStatus.READY_TO_MIGRATE.statusCode,
                 )
                 migrationStatusService.save(migrationStatus)
+                preparedTotal++
             }
             log.debug("Successfully prepared (saved to loanorc.t1 table) applications in status ${entry.key} ")
 
         }
-        log.debug("Preparing applications for migration finished")
+        log.debug("Preparing applications for migration finished, prepared total: $preparedTotal")
     }
 
     override fun findByStatusAndDays(status: ApplicationStatus, days: Int?): List<MigrationStatusDao> {
@@ -67,13 +70,17 @@ class ApplicationServiceImpl(
         applicationRepository.findByStatus(status)
 
     @Transactional
-    override fun prepareUpdatedApplications(): List<MigrationStatusDao> {
+    override fun prepareUpdatedApplications(){
         log.debug("Start updating applications for migration in loanorc.t1 table ")
         val applicationsForUpdate: List<MigrationStatusDao> = applicationRepository.findUpdatedApplications()
-        migrationStatusService.updateStatusesAndDates(applicationsForUpdate.map { it.id },
-            MigrationStatus.READY_TO_MIGRATE.statusCode)
-        log.debug("Updating applications for migration in loanorc.t1 table finished")
-
-        return applicationsForUpdate
+        applicationsForUpdate.forEach {
+            val migrationStatus = MigrationStatusT1(
+                it.id,
+                it.updateDate,
+                MigrationStatus.READY_TO_MIGRATE.statusCode,
+            )
+            migrationStatusService.save(migrationStatus)
+            log.debug("Updating applications for migration in loanorc.t1 table finished")
+        }
     }
 }
