@@ -12,4 +12,5 @@ interface ApplicationRepository {
     fun findByStatusSetAtDaysBefore(status: ApplicationStatus, days: Int): List<MigrationStatusDao>
     fun findByStatus(status: ApplicationStatus): List<MigrationStatusDao>
     fun findUpdatedApplications(): List<MigrationStatusDao>
+    fun findNotApprovedForMigrationAppsInfo(): List<MigrationStatusDao>
 }

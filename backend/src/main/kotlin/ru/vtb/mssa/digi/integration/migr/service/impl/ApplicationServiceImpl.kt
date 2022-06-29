@@ -2,6 +2,7 @@ package ru.vtb.mssa.digi.integration.migr.service.impl
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import ru.vtb.mssa.digi.integration.migr.exception.InvalidResponseException
@@ -12,6 +13,7 @@ import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus
 import ru.vtb.mssa.digi.integration.migr.model.enum.MigrationStatus
 import ru.vtb.mssa.digi.integration.migr.repository.ApplicationRepository
 import ru.vtb.mssa.digi.integration.migr.service.ApplicationService
+import ru.vtb.mssa.digi.integration.migr.service.MigrationService.Companion.notMigrated
 import ru.vtb.mssa.digi.integration.migr.service.MigrationStatusService
 import ru.vtb.mssa.digi.integration.migr.validation.ApplicationValidator
 import java.util.*
@@ -70,7 +72,7 @@ class ApplicationServiceImpl(
         applicationRepository.findByStatus(status)
 
     @Transactional
-    override fun prepareUpdatedApplications(){
+    override fun prepareUpdatedApplications() {
         log.debug("Start updating applications for migration in loanorc.t1 table ")
         val applicationsForUpdate: List<MigrationStatusDao> = applicationRepository.findUpdatedApplications()
         applicationsForUpdate.forEach {
@@ -81,6 +83,22 @@ class ApplicationServiceImpl(
             )
             migrationStatusService.save(migrationStatus)
             log.debug("Updating applications for migration in loanorc.t1 table finished")
+        }
+    }
+
+    override fun saveNotApprovedForMigrationAppsInfo() {
+        val NOT_APPROVED_APPS_MESSAGE = "${HttpStatus.INTERNAL_SERVER_ERROR} " +
+                "Не передается в выгрузке - последняя запись (дата и статус) в таблице application_status не проходит по срокам "
+        val applicationsForUpdate: List<MigrationStatusDao> =
+            applicationRepository.findNotApprovedForMigrationAppsInfo()
+        applicationsForUpdate.forEach {
+            val migrationStatus = MigrationStatusT1(
+                it.id,
+                it.updateDate,
+                MigrationStatus.ERROR.statusCode,
+                NOT_APPROVED_APPS_MESSAGE)
+            migrationStatusService.save(migrationStatus)
+            notMigrated++
         }
     }
 }

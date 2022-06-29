@@ -16,7 +16,7 @@ class MigrationService(
     companion object {
         private val log: Logger = LoggerFactory.getLogger(ApplicationServiceImpl::class.java)
         var successful: Int = 0
-        var failed: Int = 0
+        var notMigrated: Int = 0
     }
 
     override fun run(vararg args: String?) {
@@ -29,13 +29,14 @@ class MigrationService(
         while (migrationIteration.migrateApplications()) {
             log.debug("Preparing applications in process")
         }
-        log.debug("Successfully migrated applications total: $successful , not migrated: $failed ")
+        log.debug("Successfully migrated applications total: $successful , not migrated: $notMigrated ")
         exitProcess(0)
     }
 
     fun prepareMigrationStatusTable() {
         applicationService.prepareApplicationsForMigration()
         applicationService.prepareUpdatedApplications()
+        applicationService.saveNotApprovedForMigrationAppsInfo()
 
     }
 

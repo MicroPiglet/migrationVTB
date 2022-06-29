@@ -90,7 +90,9 @@ class ApplicationRepositoryImpl(
                 """.trimIndent(),
             param
         ) {
-            if (it.getString("id")!= null){result.add(processMigrationStatus(it))}
+            if (it.getString("id") != null) {
+                result.add(processMigrationStatus(it))
+            }
         }
         return result
     }
@@ -118,7 +120,9 @@ class ApplicationRepositoryImpl(
             """.trimIndent(),
             param
         ) {
-            if (it.getString("id")!= null){result.add(processMigrationStatus(it))}
+            if (it.getString("id") != null) {
+                result.add(processMigrationStatus(it))
+            }
         }
         return result
     }
@@ -143,7 +147,7 @@ class ApplicationRepositoryImpl(
                 """.trimIndent(),
             param
         ) {
-                result.add(processMigrationStatus(it))
+            result.add(processMigrationStatus(it))
         }
         return result
     }
@@ -162,6 +166,33 @@ class ApplicationRepositoryImpl(
                 """.trimIndent(),
         ) {
             result.add(it.getString("id").toUUID())
+        }
+        return result
+    }
+
+    override fun findNotApprovedForMigrationAppsInfo(): List<MigrationStatusDao> {
+        val result: MutableList<MigrationStatusDao> = arrayListOf()
+
+        namedParameterJdbcTemplate.query(
+            """
+            select ap.id,
+            ason.update_date, ason.status , t1.id,
+            now() - ason.update_date  
+            from loanorc.application as ap
+            join loanorc.application_status as ason
+            on ap.id  = ason.application_id 
+            and ason.id in (SELECT  as2.id
+            FROM loanorc.application_status as2 
+            LEFT JOIN loanorc.application_status as3        
+            ON as2.application_id  = as3.application_id 
+            AND as2.update_date < as3.update_date 
+            WHERE as3.update_date  is null)
+            left join loanorc.t1 as t1
+            on ap.id  = t1.id
+            where t1.id is null
+                """.trimIndent(),
+        ) {
+            result.add(processMigrationStatus(it))
         }
         return result
     }

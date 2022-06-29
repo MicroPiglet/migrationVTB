@@ -13,4 +13,5 @@ interface ApplicationService {
     fun findByStatus(status: ApplicationStatus): List<MigrationStatusDao>
     fun prepareUpdatedApplications()
     fun prepareApplicationsForMigration()
+    fun saveNotApprovedForMigrationAppsInfo()
 }

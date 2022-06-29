@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional
 import ru.vtb.mssa.digi.integration.migr.client.IntegrationAflClient
 import ru.vtb.mssa.digi.integration.migr.mapper.SendProductStatusMapper
 import ru.vtb.mssa.digi.integration.migr.model.enum.MigrationStatus
-import ru.vtb.mssa.digi.integration.migr.service.MigrationService.Companion.failed
+import ru.vtb.mssa.digi.integration.migr.service.MigrationService.Companion.notMigrated
 import ru.vtb.mssa.digi.integration.migr.service.MigrationService.Companion.successful
 import java.util.*
 
@@ -63,7 +63,7 @@ class MigrationIteration(
                         log.debug("Cannot migrate an application with id: $applicationId,  ${e.stackTraceToString()}")
                         migrationStatusService.setErrorStatus(applicationId,
                             if (e.message.isNullOrBlank())"" else {e.message!!})
-                        failed++
+                        notMigrated++
                     }
                 }
             }
