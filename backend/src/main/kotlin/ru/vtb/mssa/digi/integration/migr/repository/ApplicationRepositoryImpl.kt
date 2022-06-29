@@ -86,7 +86,7 @@ class ApplicationRepositoryImpl(
             left join loanorc.t1 as t1
             on ap.id  = t1.id
             where t1.id is NUll   
-            and (:curDate - date(ason.update_date) + 1) between 0 and :days
+            and (:curDate - date(ason.update_date)) between 0 and :days
                 """.trimIndent(),
             param
         ) {
