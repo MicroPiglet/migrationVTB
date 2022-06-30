@@ -1,7 +1,5 @@
 package ru.vtb.mssa.digi.integration.migr.repository
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Component
@@ -17,16 +15,16 @@ class QueueRepository(
         const val TOPIC_NAME = "PUBLISH-STATUS-TO-AFL"
     }
 
-    fun getAppIdsInPublishStatusTopic(): List <UUID> {
+    fun getAppIdsInPublishStatusTopic(): List<UUID> {
         val param = MapSqlParameterSource().apply {
             addValue("topic", TOPIC_NAME)
         }
-        return namedParameterJdbcTemplate.queryForList("""
+        return namedParameterJdbcTemplate.queryForList(
+            """
             select distinct destination_id  
             from $TABLE_NAME 
             where topic = :topic 
-            """.trimIndent(),
-            param,
-            UUID::class.java)
-        }
+            """.trimIndent(), param, UUID::class.java
+        )
     }
+}

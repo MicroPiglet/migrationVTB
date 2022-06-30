@@ -22,10 +22,11 @@ class MdmServiceImpl(
         if (crossReferences.isEmpty()) {
             log.debug("int-mdm: crossRef is empty, unc=${uncId}")
             throw InvalidResponseException(
-                "int-mdm: crossRef is empty, unc=${uncId}")
+                "int-mdm: crossRef is empty, unc=${uncId}"
+            )
         }
-        return crossRefResponse.partyUId
-            ?: throw InvalidResponseException(
-                "int-mdm: Customer cross-ref mdmId not found, unc=${uncId}")
+        return crossRefResponse.partyUId ?: throw InvalidResponseException(
+            "int-mdm: Customer cross-ref mdmId not found, unc=${uncId}"
+        )
     }
 }

@@ -23,17 +23,14 @@ class ObjectMapperConfig {
     fun customObjectMapper(): ObjectMapper = baseObjectMapper().apply {
         registerModule(JavaTimeModule().apply {
             this.addDeserializer(
-                LocalDate::class.java,
-                LocalDateDeserializer(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+                LocalDate::class.java, LocalDateDeserializer(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
             )
             this.addSerializer(LocalDate::class.java, LocalDateSerializer(DateTimeFormatter.ofPattern("dd.MM.yyyy")))
             this.addSerializer(
-                XMLGregorianCalendar::class.java,
-                XMLCalendarSerializer(XMLGregorianCalendar::class.java)
+                XMLGregorianCalendar::class.java, XMLCalendarSerializer(XMLGregorianCalendar::class.java)
             )
             this.addDeserializer(
-                XMLGregorianCalendar::class.java,
-                XMLCalendarDeserializer(XMLGregorianCalendar::class.java)
+                XMLGregorianCalendar::class.java, XMLCalendarDeserializer(XMLGregorianCalendar::class.java)
             )
         })
         setSerializationInclusion(JsonInclude.Include.NON_NULL)
@@ -44,8 +41,7 @@ class ObjectMapperConfig {
     fun aflClientObjectMapper(): ObjectMapper = baseObjectMapper().apply {
         registerModule(JavaTimeModule().apply {
             this.addDeserializer(
-                LocalDate::class.java,
-                LocalDateDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                LocalDate::class.java, LocalDateDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
             )
             this.addSerializer(LocalDate::class.java, LocalDateSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         })

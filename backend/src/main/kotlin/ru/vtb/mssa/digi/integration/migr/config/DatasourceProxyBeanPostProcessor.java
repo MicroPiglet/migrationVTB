@@ -19,68 +19,54 @@ import java.lang.reflect.Method;
 
 @Component
 @Slf4j
-@ConditionalOnProperty(value="debug.datasource.proxy.enabled", havingValue = "true")
+@ConditionalOnProperty(value = "debug.datasource.proxy.enabled", havingValue = "true")
 public class DatasourceProxyBeanPostProcessor implements BeanPostProcessor {
-
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) {
-
-        if (bean instanceof DataSource) {
-
-            log.info("DataSource bean has been found: {}", bean);
-
-            final ProxyFactory proxyFactory = new ProxyFactory(bean);
-
-            proxyFactory.setProxyTargetClass(true);
-            proxyFactory.addAdvice(new ProxyDataSourceInterceptor((DataSource) bean));
-
-            return proxyFactory.getProxy();
-        }
-        return bean;
-    }
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) {
         return bean;
     }
 
-    private static class ProxyDataSourceInterceptor implements MethodInterceptor {
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) {
+        if (bean instanceof DataSource) {
+            log.info("DataSource bean has been found: {}", bean);
+            final ProxyFactory proxyFactory = new ProxyFactory(bean);
+            proxyFactory.setProxyTargetClass(true);
+            proxyFactory.addAdvice(new ProxyDataSourceInterceptor((DataSource) bean));
+            return proxyFactory.getProxy();
+        }
+        return bean;
+    }
 
+    private static class ProxyDataSourceInterceptor implements MethodInterceptor {
         private final DataSource dataSource;
 
         public ProxyDataSourceInterceptor(final DataSource dataSource) {
             super();
-
             DefaultQueryLogEntryCreator logEntryCreator = new DefaultQueryLogEntryCreator() {
                 @Override
                 protected String formatQuery(String query) {
                     return FormatStyle.BASIC.getFormatter().format(query);  // use Hibernte formatter
                 }
             };
-
             logEntryCreator.setMultiline(true);
-
             SLF4JQueryLoggingListener listener = new SLF4JQueryLoggingListener();
             listener.setLogLevel(SLF4JLogLevel.INFO);
             listener.setQueryLogEntryCreator(logEntryCreator);
-
             this.dataSource = ProxyDataSourceBuilder.create(dataSource)
-                    .name(dataSource.getClass().getSimpleName())
-                    .listener(listener)
-                    .countQuery()
-                    .build();
+                                                    .name(dataSource.getClass().getSimpleName())
+                                                    .listener(listener)
+                                                    .countQuery()
+                                                    .build();
         }
 
         @Override
         public Object invoke(final MethodInvocation invocation) throws Throwable {
-
-            final Method proxyMethod = ReflectionUtils.findMethod(this.dataSource.getClass(),
-                    invocation.getMethod().getName());
-
+            final Method proxyMethod = ReflectionUtils.findMethod(this.dataSource.getClass(), invocation.getMethod().getName());
             if (proxyMethod != null) {
                 return proxyMethod.invoke(this.dataSource, invocation.getArguments());
             }
-
             return invocation.proceed();
         }
     }

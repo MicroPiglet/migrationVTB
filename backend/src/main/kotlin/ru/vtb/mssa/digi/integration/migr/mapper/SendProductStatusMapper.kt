@@ -35,7 +35,7 @@ class SendProductStatusMapper {
                 )!!
             ),
             scoringDate = xmlGregorianCalendarToOffsetDateTime(application.scoringRequest?.dataArea?.loanApplicationEBO?.auditHistory?.createdDateTime),
-            endDate = XmlGregorianCalendarToLocalDate(
+            endDate = xmlGregorianCalendarToLocalDate(
                 application.scoringResult?.dataArea?.loanApplicationEBO?.desicionReport?.firstOrNull()?.decisionEndDate
             ),
             offerId = null,
@@ -63,7 +63,7 @@ class SendProductStatusMapper {
 
     }
 
-    private fun XmlGregorianCalendarToLocalDate(xmlGregorianCalendar: XMLGregorianCalendar?): LocalDate? {
+    private fun xmlGregorianCalendarToLocalDate(xmlGregorianCalendar: XMLGregorianCalendar?): LocalDate? {
         return if (xmlGregorianCalendar != null) LocalDate.of(
             xmlGregorianCalendar.year, xmlGregorianCalendar.month, xmlGregorianCalendar.day
         )

@@ -21,7 +21,7 @@ class IntegrationAflClient(
     restTemplateBuilder: RestTemplateBuilder,
     restClientProperties: RestClientProperties,
     @Qualifier("aflClientJsonObjectMapper") val objectMapper: ObjectMapper
-    ) {
+) {
 
     private val restTemplate: RestTemplate
     private val property: RestClientProperties.RestClientProperty
@@ -31,10 +31,6 @@ class IntegrationAflClient(
         property = restClientProperties.afl
     }
 
-    companion object {
-        private const val CROSS_REFERENCES_BY_EXTERNAL_ID = "/application/v1/"
-    }
-
     fun sendProductStatusRequestToAfl(
         mdmId: String,
         applicationId: String,
@@ -42,16 +38,16 @@ class IntegrationAflClient(
     ) = try {
         objectMapper.writeValueAsString(request)
         val httpEntity = HttpEntity(objectMapper.writeValueAsString(request), httpHeaders())
-        val path = CROSS_REFERENCES_BY_EXTERNAL_ID.plus(mdmId).plus("/").plus(applicationId)
+        val path = "/application/v1/$mdmId/$applicationId"
 
         restTemplate.postForEntity(
-            path.asUri(),
-            httpEntity,
-            SendProductStatusRequest::class.java
+            path.asUri(), httpEntity, SendProductStatusRequest::class.java
         ).statusCode.let {
             when (it.isError) {
                 false -> it
-                true -> throw ResponseStatusException(it, "Error during integration-afl invocation! mdmId: $mdmId, applicationId: $applicationId")
+                true -> throw ResponseStatusException(
+                    it, "Error during integration-afl invocation! mdmId: $mdmId, applicationId: $applicationId"
+                )
             }
         }
     } catch (e: HttpStatusCodeException) {
@@ -59,17 +55,13 @@ class IntegrationAflClient(
     }
 
 
-    private fun throwExceptionIfIntegrationMdmIsUnavailable(e: HttpStatusCodeException): Nothing {
-
+    private fun throwExceptionIfIntegrationMdmIsUnavailable(e: HttpStatusCodeException) {
         throw ExternalServiceUnavailableException(
-            "Error during afl invocation! Body:" +
-                    e.responseBodyAsString)
+            "Error during afl invocation! Body:" + e.responseBodyAsString
+        )
     }
 
-    private fun String.asUri() = UriComponentsBuilder
-        .fromHttpUrl(property.url)
-        .path(this)
-        .toUriString()
+    private fun String.asUri() = UriComponentsBuilder.fromHttpUrl(property.url).path(this).toUriString()
 
     private fun httpHeaders(): HttpHeaders {
         val headers = HttpHeaders()

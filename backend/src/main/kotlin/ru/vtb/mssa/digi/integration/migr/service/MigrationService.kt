@@ -39,6 +39,4 @@ class MigrationService(
         applicationService.saveNotApprovedForMigrationAppsInfo()
 
     }
-
-
 }

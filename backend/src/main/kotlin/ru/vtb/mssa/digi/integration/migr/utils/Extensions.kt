@@ -1,8 +1,5 @@
-package config
+package ru.vtb.mssa.digi.integration.migr.utils
 
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
-import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.math.RoundingMode.FLOOR
 import java.time.LocalDate
@@ -11,9 +8,6 @@ import java.time.ZoneId
 import java.util.*
 import javax.xml.datatype.DatatypeFactory
 import javax.xml.datatype.XMLGregorianCalendar
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
-import kotlin.coroutines.coroutineContext
 
 internal fun XMLGregorianCalendar.toLocalDate(): LocalDate = LocalDate.of(this.year, this.month, this.day)
 

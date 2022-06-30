@@ -2,7 +2,28 @@ package ru.vtb.mssa.digi.integration.migr.mapper
 
 import org.springframework.stereotype.Component
 import ru.vtb.mssa.digi.integration.migr.model.enum.AflStatus
-import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus.*
+import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus.APPROVED
+import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus.AUTO_APPROVED
+import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus.CALL_BS_223_LOAN_PRODUCT
+import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus.CALL_BS_72
+import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus.CALL_BS_85
+import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus.DRAFT
+import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus.ERROR_WHILE_ISSUANCE_MONEY
+import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus.GET_MONEY_ACTION_START
+import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus.HARD_DECLINE
+import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus.ISSUED
+import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus.ISSUED_IN_EFR
+import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus.OFFLINE_CONFIRMATION
+import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus.ONLINE_CREDIT_ISSUING_GET_MONEY_ASYNC_TASK
+import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus.SCORING_COMPLETE
+import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus.SCORING_CREDIT_CONVEYOR_PROCESSING
+import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus.SCORING_SEND_TO_INTEGRATION_CC
+import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus.SCORING_START
+import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus.STATUS_PUBLISHER_BEST_CHOICE_NO_ASYNC_TASK
+import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus.STATUS_PUBLISHER_BEST_CHOICE_OFFLINE_ASYNC_TASK
+import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus.STATUS_PUBLISHER_BEST_CHOICE_ONLINE_ASYNC_TASK
+import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus.STATUS_PUBLISHER_HARD_DECLINE_ONLINE_ASYNC_TASK
+import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus.STATUS_PUBLISHER_ONLINE_CREDIT_ISSUING_ASYNC_TASK
 import java.security.InvalidParameterException
 
 @Component
@@ -35,7 +56,7 @@ class StatusMapper {
             ERROR_WHILE_ISSUANCE_MONEY.name to AflStatus.IN_PROGRESS.name
         )
 
-        fun map(status: String?): String? {
+        fun map(status: String?): String {
             return when (status) {
                 null -> throw InvalidParameterException("Application status is null")
                 else -> converterMap[status]

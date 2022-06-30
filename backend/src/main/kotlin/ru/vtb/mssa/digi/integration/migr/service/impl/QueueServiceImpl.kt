@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service
 import ru.vtb.mssa.digi.integration.migr.repository.QueueRepository
 import ru.vtb.mssa.digi.integration.migr.service.QueueService
 import java.util.*
-import javax.transaction.Transactional
 
 @Service
 class QueueServiceImpl(

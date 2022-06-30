@@ -7,7 +7,6 @@ import ru.vtb.mssa.digi.integration.migr.model.dao.PublishPersonLoanApplicationS
 import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationStatus
 import ru.vtb.mssa.digi.integration.migr.model.enum.ApplicationType
 import ru.vtb24.enterpriseobjectlibrary.business.common.services.loanapplicationscoring.v1.LoanApplicationScoringEBMType
-import ru.vtb24.enterpriseobjectlibrary.business.common.services.publishpersonloanapplicationstatus.v2.PublishPersonLoanApplicationStatusEBM
 import java.time.LocalDateTime
 import java.util.*
 

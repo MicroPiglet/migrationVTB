@@ -3,12 +3,14 @@ package ru.vtb.mssa.digi.integration.migr.config
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
-import config.toXmlDate
-import config.toXmlDateTime
+import ru.vtb.mssa.digi.integration.migr.utils.toXmlDate
+import ru.vtb.mssa.digi.integration.migr.utils.toXmlDateTime
 import java.io.IOException
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter.*
+import java.time.format.DateTimeFormatter.ISO_DATE
+import java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME
+import java.time.format.DateTimeFormatter.ofPattern
 import javax.xml.datatype.XMLGregorianCalendar
 
 class XMLCalendarDeserializer(clazz: Class<XMLGregorianCalendar>) : StdDeserializer<XMLGregorianCalendar>(clazz) {

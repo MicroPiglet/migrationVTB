@@ -8,7 +8,6 @@ import ru.vtb.mssa.digi.integration.migr.model.db.MigrationStatusT1
 import ru.vtb.mssa.digi.integration.migr.model.enum.MigrationStatus
 import ru.vtb.mssa.digi.integration.migr.repository.MigrationStatusRepository
 import ru.vtb.mssa.digi.integration.migr.service.MigrationStatusService
-import ru.vtb.mssa.digi.integration.migr.service.QueueService
 import java.util.*
 import javax.transaction.Transactional
 
@@ -62,8 +61,12 @@ class MigrationStatusServiceImpl(
 
     @Transactional
     override fun setErrorStatus(id: UUID, errorDescription: String) {
-        migrationStatusRepository.setErrorStatus(id, "${HttpStatus.INTERNAL_SERVER_ERROR} " +
-            if (errorDescription.length <= 210) errorDescription else errorDescription.substring(0, 209)
+        migrationStatusRepository.setErrorStatus(
+            id,
+            "${HttpStatus.INTERNAL_SERVER_ERROR} " + if (errorDescription.length <= 210) errorDescription else errorDescription.substring(
+                0,
+                209
+            )
         )
     }
 }

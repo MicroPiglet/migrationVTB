@@ -25,14 +25,14 @@ class MigrationIteration(
         private var REQUEST_RER_SECOND: Int = 100
     }
 
-
     @Transactional
     fun migrateApplications(): Boolean {
         val applicationIds =
             ArrayList(migrationStatusService.findIdsByStatus(MigrationStatus.READY_TO_MIGRATE.statusCode))
         val appIdsInPublishStatusTopic: List<UUID> = queueService.getAppIdsInPublishStatusTopic()
-        migrationStatusService.updateStatuses(appIdsInPublishStatusTopic,
-            MigrationStatus.SENT_BY_THE_ORCHESTRATOR.statusCode)
+        migrationStatusService.updateStatuses(
+            appIdsInPublishStatusTopic, MigrationStatus.SENT_BY_THE_ORCHESTRATOR.statusCode
+        )
         applicationIds.removeAll(appIdsInPublishStatusTopic)
         log.debug("Valid applicationIds in ready status: count in portion: ${applicationIds.size}")
         return if (applicationIds.isEmpty()) {
@@ -51,18 +51,22 @@ class MigrationIteration(
                         val application = applicationService.findApplication(applicationId)
                         val mdmId = aflService.getPartyUIdByUncId(application.clientUncId)
                         val productStatusRequest = sendProductStatusMapper.mapRequest(
-                            applicationId, application)
-                        aflClient.sendProductStatusRequestToAfl(mdmId.toString(),
-                            applicationId.toString(),
-                            productStatusRequest)
+                            applicationId, application
+                        )
+                        aflClient.sendProductStatusRequestToAfl(
+                            mdmId.toString(), applicationId.toString(), productStatusRequest
+                        )
 
                         log.debug("Application was migrated, application id: $applicationId")
                         migrationStatusService.updateStatus(applicationId, MigrationStatus.SUCCESS.statusCode)
                         successful++
                     } catch (e: Exception) {
                         log.debug("Cannot migrate an application with id: $applicationId,  ${e.stackTraceToString()}")
-                        migrationStatusService.setErrorStatus(applicationId,
-                            if (e.message.isNullOrBlank())"" else {e.message!!})
+                        migrationStatusService.setErrorStatus(
+                            applicationId, if (e.message.isNullOrBlank()) "" else {
+                                e.message!!
+                            }
+                        )
                         notMigrated++
                     }
                 }
@@ -75,9 +79,9 @@ class MigrationIteration(
             log.debug("Sending request, application with id: {}", applicationId)
             sendRequest()
         } catch (e: Exception) {
-            log.error("Exception while processing application with id: {}",
-                applicationId,
-                e.message)
+            log.error(
+                "Exception while processing application with id: {}", applicationId, e.message
+            )
         }
     }
 
@@ -87,6 +91,5 @@ class MigrationIteration(
         val endRequest = System.currentTimeMillis()
         val timeForSleep = 1000L / REQUEST_RER_SECOND - (endRequest - startRequest)
         if (timeForSleep > 0) Thread.sleep(timeForSleep)
-
     }
 }

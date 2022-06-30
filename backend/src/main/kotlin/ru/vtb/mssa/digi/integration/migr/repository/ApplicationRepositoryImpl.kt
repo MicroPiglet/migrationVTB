@@ -2,7 +2,7 @@ package ru.vtb.mssa.digi.integration.migr.repository
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import config.toUUID
+import ru.vtb.mssa.digi.integration.migr.utils.toUUID
 import org.postgresql.util.PGobject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -56,8 +56,7 @@ class ApplicationRepositoryImpl(
                      left join loanorc.application_status as ason
                      on ap.id  = ason.application_id 
             where ap.id = :application_id
-            """.trimIndent(),
-            mapSqlParameterSource
+            """.trimIndent(), mapSqlParameterSource
         ) {
             result = processApplicationRow(it)
         }
@@ -87,8 +86,7 @@ class ApplicationRepositoryImpl(
             on ap.id  = t1.id
             where t1.id is NUll   
             and (:curDate - date(ason.update_date)) between 0 and :days
-                """.trimIndent(),
-            param
+                """.trimIndent(), param
         ) {
             if (it.getString("id") != null) {
                 result.add(processMigrationStatus(it))
@@ -117,8 +115,7 @@ class ApplicationRepositoryImpl(
             left join loanorc.t1 as t1
             on ap.id  = t1.id
             where t1.id is NUll
-            """.trimIndent(),
-            param
+            """.trimIndent(), param
         ) {
             if (it.getString("id") != null) {
                 result.add(processMigrationStatus(it))
@@ -144,8 +141,7 @@ class ApplicationRepositoryImpl(
             join loanorc.t1 as t1
             on ap.id  = t1.id
             where ason.update_date != t1.update_date 
-                """.trimIndent(),
-            param
+                """.trimIndent(), param
         ) {
             result.add(processMigrationStatus(it))
         }

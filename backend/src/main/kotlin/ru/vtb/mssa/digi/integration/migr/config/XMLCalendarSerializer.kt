@@ -16,9 +16,7 @@ class XMLCalendarSerializer(clazz: Class<XMLGregorianCalendar>) : StdSerializer<
     override fun serialize(value: XMLGregorianCalendar, jgen: JsonGenerator, provider: SerializerProvider) {
         val zonedDateTime = value.toGregorianCalendar().toZonedDateTime()
         val offsetDateTime = zonedDateTime.toOffsetDateTime()
-
-        val format: DateTimeFormatter
-        format = if (isDate(zonedDateTime)) {
+        val format: DateTimeFormatter = if (isDate(zonedDateTime)) {
             ISO_LOCAL_DATE
         } else {
             ISO_OFFSET_DATE_TIME

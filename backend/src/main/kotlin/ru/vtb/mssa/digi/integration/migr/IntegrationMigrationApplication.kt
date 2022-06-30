@@ -10,6 +10,5 @@ import ru.vtb.mssa.digi.integration.migr.properties.RestClientProperties
 class IntegrationMigrationApplication
 
 fun main(args: Array<String>) {
-	runApplication<IntegrationMigrationApplication>(*args)
-
+    runApplication<IntegrationMigrationApplication>(*args)
 }

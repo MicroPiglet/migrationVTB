@@ -12,9 +12,7 @@ import javax.persistence.Table
 @Table(name = "T1", schema = "loanorc")
 class MigrationStatusT1(
 
-    @Id
-    @Type(type="pg-uuid")
-    val id: UUID,
+    @Id @Type(type = "pg-uuid") val id: UUID,
     @Column(name = "update_date", nullable = false) val updateDate: Timestamp,
     @Column(name = "application_migration_status", nullable = true) val migrationStatus: Int,
     @Column(name = "error_description", nullable = true) val errorDescription: String? = null,

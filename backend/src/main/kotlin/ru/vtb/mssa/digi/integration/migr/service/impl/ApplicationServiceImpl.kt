@@ -46,7 +46,6 @@ class ApplicationServiceImpl(
                 preparedTotal++
             }
             log.debug("Successfully prepared (saved to loanorc.t1 table) applications in status ${entry.key} ")
-
         }
         log.debug("Preparing applications for migration finished, prepared total: $preparedTotal")
     }
@@ -87,16 +86,14 @@ class ApplicationServiceImpl(
     }
 
     override fun saveNotApprovedForMigrationAppsInfo() {
-        val NOT_APPROVED_APPS_MESSAGE = "${HttpStatus.INTERNAL_SERVER_ERROR} " +
-                "Не передается в выгрузке - последняя запись (дата и статус) в таблице application_status не проходит по срокам "
+        val NOT_APPROVED_APPS_MESSAGE =
+            "${HttpStatus.INTERNAL_SERVER_ERROR} " + "Не передается в выгрузке - последняя запись (дата и статус) в таблице application_status не проходит по срокам "
         val applicationsForUpdate: List<MigrationStatusDao> =
             applicationRepository.findNotApprovedForMigrationAppsInfo()
         applicationsForUpdate.forEach {
             val migrationStatus = MigrationStatusT1(
-                it.id,
-                it.updateDate,
-                MigrationStatus.ERROR.statusCode,
-                NOT_APPROVED_APPS_MESSAGE)
+                it.id, it.updateDate, MigrationStatus.ERROR.statusCode, NOT_APPROVED_APPS_MESSAGE
+            )
             migrationStatusService.save(migrationStatus)
             notMigrated++
         }

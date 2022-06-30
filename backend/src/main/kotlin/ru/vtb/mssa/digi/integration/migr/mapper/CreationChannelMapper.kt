@@ -8,12 +8,11 @@ import java.security.InvalidParameterException
 class CreationChannelMapper {
 
     companion object {
-
         private val converterMap = HashMap<String, Data.CreationChannel>();
 
         init {
             for (creationChannel in Data.CreationChannel.values()) {
-                converterMap.put(creationChannel.value, creationChannel);
+                converterMap[creationChannel.value] = creationChannel;
             }
         }
 
