@@ -5,7 +5,7 @@ debug:
 
 spring:
   application:
-    name: mscl-issu-integration-router
+    name: mssa-digi-dam-migration
   jackson:
     default-property-inclusion: non_null
   jpa:
@@ -18,7 +18,7 @@ spring:
         default_schema: loanorc
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${loanorc_DB_URL:jdbc:postgresql://127.0.0.1:5432/postgres}
+    url: ${LOANORC_DB_URL:jdbc:postgresql://127.0.0.1:5432/postgres}
     username: ${loanorc_DB_USER:postgres}
     password: ${loanorc_DB_PASSWORD:root}
     hikari:
@@ -61,7 +61,7 @@ afl:
 
 msa:
   meta:
-    microservice-name: mssa-digi-integration-migr
+    microservice-name: mssa-digi-dam-migration
     namespace: # openshift namespace
     ris-code: 0000_0
     project-code: MSSAD
